@@ -8,7 +8,10 @@ public class ShieldScript : MonoBehaviour
     {
         gm = FindObjectOfType<GameManager>();
     }
-
+    private void Update()
+    {
+        transform.Rotate(new Vector3(.5f, .5f, .5f));
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Player"))

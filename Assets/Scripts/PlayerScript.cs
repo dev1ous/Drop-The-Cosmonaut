@@ -10,11 +10,20 @@ public class PlayerScript : MonoBehaviour
     private bool isAlive = true;
     public void TakeDamage()
     {
+        Death();
+    }
+
+    private bool Death()
+    {
         if (haveShield)
             haveShield = false;
         else
-            Death();
-    }
+        {
+            isAlive = false;
+            gameObject.SetActive(false);
+            return true;
+        }
 
-    private void Death() => isAlive = false;
+        return false;
+    }
 }
