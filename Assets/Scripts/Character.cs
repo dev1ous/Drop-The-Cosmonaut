@@ -11,6 +11,8 @@ public class Character : MonoBehaviour
     [SerializeField] private float fallingSpeed = 10f;
 
     [Header("Misc")]
+    [SerializeField] private Camera cam = null;
+    [SerializeField] private BoxCollider ModelSize = null;
     private Touch touchInput;
     private bool isTouch = false;
     private Vector2 touchScreenPosition;
@@ -39,9 +41,22 @@ public class Character : MonoBehaviour
     {
         if (isTouch)
         {
-            Vector3 onPressPositionToWorld = Camera.main.ScreenToWorldPoint(new Vector3(onPressScreenPosition.x, onPressScreenPosition.y, 10f));
-            Vector3 touchPositionToWorld = Camera.main.ScreenToWorldPoint(new Vector3(touchScreenPosition.x, touchScreenPosition.y, 10f));
+            Vector3 onPressPositionToWorld = cam.ScreenToWorldPoint(new Vector3(onPressScreenPosition.x, onPressScreenPosition.y, 10f));
+            Vector3 touchPositionToWorld = cam.ScreenToWorldPoint(new Vector3(touchScreenPosition.x, touchScreenPosition.y, 10f));
             Vector3 directionVector = touchPositionToWorld - onPressPositionToWorld;
+
+
+            if (cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x > 1f || 
+                cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + -ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x < 0f)
+            {
+                directionVector.x = 0;
+            }
+
+            if (cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y > 1f || 
+                cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + -ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y < 0f)
+            {
+                directionVector.z = 0;
+            }
 
             transform.position += directionVector * moveSpeed * Time.deltaTime;
         }
