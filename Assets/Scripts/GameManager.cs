@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public PlayerScript player;
+    public Character player;
     public float nbFuel;
 }

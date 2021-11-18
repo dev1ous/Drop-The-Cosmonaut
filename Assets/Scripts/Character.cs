@@ -9,6 +9,8 @@ public class Character : MonoBehaviour
     [Header("Stats")]
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float fallingSpeed = 10f;
+    public bool haveShield = false;
+    private bool isAlive = true;
 
     [Header("Misc")]
     [SerializeField] private Camera cam = null;
@@ -18,7 +20,7 @@ public class Character : MonoBehaviour
     private Vector2 touchScreenPosition;
     private Vector2 onPressScreenPosition;
 
-
+   
     private void OnEnable()
     {
         touchInput.Enable();
@@ -63,6 +65,17 @@ public class Character : MonoBehaviour
 
         transform.position += Vector3.down * fallingSpeed * Time.deltaTime;
     }
+
+    public void TakeDamage()
+    {
+        if (haveShield)
+            haveShield = false;
+        else
+            Death();
+    }
+
+    private void Death() => isAlive = false;
+
 
 
 
