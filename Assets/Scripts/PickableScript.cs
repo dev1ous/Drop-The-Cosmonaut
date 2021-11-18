@@ -11,7 +11,7 @@ public class PickableScript : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            gm.nbFuel = fuelGiven;
+            gm.nbFuel += fuelGiven;
             Destroy(gameObject);
         }
     }
