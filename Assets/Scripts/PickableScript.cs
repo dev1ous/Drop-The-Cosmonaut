@@ -1,17 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PickableScript : MonoBehaviour
 {
-    [SerializeField] private GameManager gm = null;
-    [SerializeField] private float fuelGiven = 0f;
+    [SerializeField] private PickupData pickupData;
 
-    private void OnCollisionEnter(Collision collision)
+    [HideInInspector] public Camera cam;
+    [HideInInspector] public GameManager gm;
+
+    private void Start()
     {
-        if (collision.collider.CompareTag("Player"))
+    }
+
+    private void Update()
+    {
+        transform.Rotate(new Vector3(1, 1, 1));    
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
         {
-            gm.nbFuel += fuelGiven;
+            gm.nbFuel += pickupData.fuelGiven;
             Destroy(gameObject);
         }
     }

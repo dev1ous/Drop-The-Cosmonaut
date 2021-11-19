@@ -8,11 +8,10 @@ public class ObstacleManagerScript : MonoBehaviour
     [SerializeField] private GameManager gm;
     [SerializeField] private ObstacleScript[] obstacles;
 
-    [SerializeField] private float spawnDelay;
-
-    Coroutine cor = null;
+    [SerializeField] private float speed;
 
     float timer;
+    private float spawnDelay;
 
     private void Start()
     {
@@ -25,19 +24,21 @@ public class ObstacleManagerScript : MonoBehaviour
 
     private void Update()
     {
+        spawnDelay = Random.Range(2f, 10f);
+
         timer += Time.deltaTime;
 
-        if(timer >= spawnDelay)
+
+        if (timer >= spawnDelay)
         {
             timer = 0;
-
             SpawnObstacle();
         }
     }
 
     void SpawnObstacle()
     {
-        GameObject obstacleGO = obstacles[Random.Range(0, obstacles.Length - 1)].gameObject;
+        GameObject obstacleGO = obstacles[Random.Range(0, obstacles.Length)].gameObject;
 
         Instantiate(obstacleGO, transform.position, transform.rotation);
     }
