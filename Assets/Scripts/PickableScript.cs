@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PickableScript : MonoBehaviour
 {
-    [SerializeField] private float fuelGiven = 0f;
+    [SerializeField] private PickupData pickupData;
 
-    private GameManager gm = null;
+    [HideInInspector] public Camera cam;
+    [HideInInspector] public GameManager gm;
 
     private void Start()
     {
-        gm = FindObjectOfType<GameManager>();
     }
 
     private void Update()
@@ -18,11 +16,11 @@ public class PickableScript : MonoBehaviour
         transform.Rotate(new Vector3(1, 1, 1));    
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.collider.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            gm.nbFuel += fuelGiven;
+            gm.nbFuel += pickupData.fuelGiven;
             Destroy(gameObject);
         }
     }

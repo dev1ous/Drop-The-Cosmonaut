@@ -11,7 +11,7 @@ public class ObstacleScript : MonoBehaviour
     {
         transform.Rotate(new Vector3(.1f, .1f, .1f));
 
-        //Si l'objet est derriere le player et qu'il n'est plus daans le champs de vision de la camera
+        //Si l'objet est derriere le player et qu'il n'est plus dans le champs de vision de la camera
         //alors on  detruit
     }
 
