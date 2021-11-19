@@ -8,7 +8,9 @@ public class ObstacleManagerScript : MonoBehaviour
     [SerializeField] private GameManager gm;
     [SerializeField] private ObstacleScript[] obstacles;
 
-    [SerializeField] private float speed;
+    [SerializeField] private float offset;
+
+    Vector3 pos;
 
     float timer;
     private float spawnDelay;
@@ -16,15 +18,19 @@ public class ObstacleManagerScript : MonoBehaviour
     private void Start()
     {
         foreach (ObstacleScript obs in obstacles)
-        {
             obs.gm = this.gm;
-            obs.cam = this.cam;
-        }
     }
 
     private void Update()
     {
-        spawnDelay = Random.Range(2f, 10f);
+        float viewportOffset = cam.transform.position.y - gm.player.transform.position.y;
+        pos = new Vector3(Random.Range(cam.ViewportToWorldPoint(new Vector3(0.3f, 0, viewportOffset)).x, cam.ViewportToWorldPoint(new Vector3(1, 1, viewportOffset)).x),
+                          gm.player.transform.position.y - offset,
+                          Random.Range(cam.ViewportToWorldPoint(new Vector3(0f, 0, viewportOffset)).z, cam.ViewportToWorldPoint(new Vector3(1, 1, viewportOffset)).z));
+
+        transform.position = pos;
+
+        spawnDelay = Random.Range(0.5f, 4f);
 
         timer += Time.deltaTime;
 
