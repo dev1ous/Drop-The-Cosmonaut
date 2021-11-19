@@ -19,7 +19,7 @@ public class Character : MonoBehaviour
     private bool isTouch = false;
     private Vector2 touchScreenPosition;
     private Vector2 onPressScreenPosition;
-
+    private Vector3 gyrotest;
 
     private void OnEnable()
     {
@@ -37,32 +37,38 @@ public class Character : MonoBehaviour
         touchInput.Mobile.Position.performed += TouchPosition;
         touchInput.Mobile.Touch.performed += TouchPress;
         touchInput.Mobile.Touch.canceled += TouchRelease;
+        Input.gyro.updateInterval = 0f;
     }
 
     void Update()
     {
-        if (isTouch)
+        Vector3 directionVector = Vector3.zero;
+        if (Input.gyro.enabled)
+        {
+            gyrotest += new Vector3(Input.gyro.rotationRateUnbiased.y, 0f, -Input.gyro.rotationRateUnbiased.x);
+            directionVector = gyrotest / 5f;
+        }
+        else if (isTouch)
         {
             Vector3 onPressPositionToWorld = cam.ScreenToWorldPoint(new Vector3(onPressScreenPosition.x, onPressScreenPosition.y, 10f));
             Vector3 touchPositionToWorld = cam.ScreenToWorldPoint(new Vector3(touchScreenPosition.x, touchScreenPosition.y, 10f));
-            Vector3 directionVector = touchPositionToWorld - onPressPositionToWorld;
-
-
-            if (cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x > 1f ||
-                cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + -ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x < 0f)
-            {
-                directionVector.x = 0;
-            }
-
-            if (cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y > 1f ||
-                cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + -ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y < 0f)
-            {
-                directionVector.z = 0;
-            }
-
-            transform.position += directionVector * moveSpeed * Time.deltaTime;
+            directionVector = touchPositionToWorld - onPressPositionToWorld;
         }
 
+
+        if (cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x > 1f ||
+            cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + -ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x < 0f)
+        {
+            directionVector.x = 0;
+        }
+
+        if (cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y > 1f ||
+            cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + -ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y < 0f)
+        {
+            directionVector.z = 0;
+        }
+
+        transform.position += directionVector * moveSpeed * Time.deltaTime;
         transform.position += Vector3.down * fallingSpeed * Time.deltaTime;
     }
 
