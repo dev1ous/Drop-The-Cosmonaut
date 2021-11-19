@@ -20,7 +20,7 @@ public class Character : MonoBehaviour
     private Vector2 touchScreenPosition;
     private Vector2 onPressScreenPosition;
 
-   
+
     private void OnEnable()
     {
         touchInput.Enable();
@@ -48,13 +48,13 @@ public class Character : MonoBehaviour
             Vector3 directionVector = touchPositionToWorld - onPressPositionToWorld;
 
 
-            if (cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x > 1f || 
+            if (cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x > 1f ||
                 cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + -ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x < 0f)
             {
                 directionVector.x = 0;
             }
 
-            if (cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y > 1f || 
+            if (cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y > 1f ||
                 cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + -ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y < 0f)
             {
                 directionVector.z = 0;
@@ -74,12 +74,20 @@ public class Character : MonoBehaviour
             Death();
     }
 
-    private void Death() => isAlive = false;
+    private bool Death()
+    {
+        if (haveShield)
+            haveShield = false;
+        else
+        {
+            isAlive = false;
+            gameObject.SetActive(false);
+            Time.timeScale = 0f;
+            return true;
+        }
 
-
-
-
-
+        return false;
+    }
 
     private void TouchPosition(InputAction.CallbackContext context)
     {
