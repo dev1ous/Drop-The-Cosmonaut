@@ -24,7 +24,6 @@ public class ObstacleManagerScript : MonoBehaviour
     private void Update()
     {
         float viewportOffset = cam.transform.position.y - gm.player.transform.position.y;
-        Debug.Log(viewportOffset);
         pos = new Vector3(Random.Range(cam.ViewportToWorldPoint(new Vector3(0.3f, 0, viewportOffset)).x, cam.ViewportToWorldPoint(new Vector3(1, 1, viewportOffset)).x),
                           gm.player.transform.position.y - offset,
                           Random.Range(cam.ViewportToWorldPoint(new Vector3(0f, 0, viewportOffset)).z, cam.ViewportToWorldPoint(new Vector3(1, 1, viewportOffset)).z));
