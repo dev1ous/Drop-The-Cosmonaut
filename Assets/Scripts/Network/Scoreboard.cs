@@ -2,17 +2,17 @@ using UnityEngine.Networking;
 using System.Collections;
 using UnityEngine;
 
-public class Scoreboard : MonoBehaviour
+public class Scoreboard : Network
 {
-    [SerializeField] Login login;
     Vector2 scroll = Vector2.zero;
-    bool showScoreboard = false;
+    [SerializeField] bool showScoreboard = false;
     int currentScore = 0;
     int previousScore = 0;
     float delayScoreSubmit;
     bool submitScore = false;
     int highestScore = 0;
     int playerRank = -1;
+
     [System.Serializable]
     public class ScoreboardUser
     {
@@ -22,15 +22,15 @@ public class Scoreboard : MonoBehaviour
     ScoreboardUser[] scoreboardUsers;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (login.isLogged)
+        if (isLogged)
         {
             if(currentScore != previousScore && !submitScore)
             {
@@ -47,16 +47,77 @@ public class Scoreboard : MonoBehaviour
         }
     }
 
-    IEnumerator SubmitScore(int score)
+    private void OnGUI()
+    {
+        if (showScoreboard)
+        {
+            GUI.Window(1, new Rect(Screen.width / 2 - 300, Screen.height / 2 - 225, 600, 460), ScoreBoardRendering, "ScoreBoard");
+        }
+        if (!isLogged)
+        {
+            //showScoreboard = false;
+            currentScore = 0;
+        }
+        else
+        {
+            GUI.Box(new Rect(Screen.width / 2 - 65, 5, 120, 25), currentScore.ToString());
+            if(GUI.Button(new Rect(5, 60, 100, 25), "ScoreBoard"))
+            {
+                showScoreboard = !showScoreboard;
+                if (!isLoading)
+                {
+                    StartCoroutine(GetScoreBoard());
+                }
+            }
+        }
+    }
+
+    private void ScoreBoardRendering(int idx)
+    {
+        if (isLoading)
+        {
+            GUILayout.Label("Loading...");
+        }
+        else
+        {
+            GUILayout.BeginHorizontal();
+            GUI.color = Color.green;
+            GUILayout.Label("Your Rank is " + (playerRank > 0 ? playerRank.ToString() : "not ranked"));
+            GUILayout.Label("Highest Score: " + highestScore.ToString());
+            GUI.color = Color.white;
+            GUILayout.EndHorizontal();
+
+            scroll = GUILayout.BeginScrollView(scroll, false, true);
+
+            for(var i = 0; i < scoreboardUsers.Length; i++)
+            {
+                GUILayout.BeginHorizontal("box");
+
+                if (scoreboardUsers[i].username == Username)
+                {
+                    GUI.color = Color.green;
+                }
+                GUILayout.Label((i + 1).ToString(), GUILayout.Width(30));
+                GUILayout.Label(scoreboardUsers[i].username, GUILayout.Width(230));
+
+                GUILayout.Label(scoreboardUsers[i].score.ToString());
+                GUI.color = Color.white;
+                GUILayout.EndHorizontal();
+            }
+            GUILayout.EndScrollView();
+        }
+    }
+
+    private IEnumerator SubmitScore(int score)
     {
         submitScore = true;
 
 
         WWWForm wWWForm = new();
-        wWWForm.AddField("username", login.Username);
+        wWWForm.AddField("username", Username);
         wWWForm.AddField("score", score);
 
-        using (UnityWebRequest unityWeb = UnityWebRequest.Post(login.url + "score.php", wWWForm))
+        using (UnityWebRequest unityWeb = UnityWebRequest.Post(url + "score.php", wWWForm))
         {
             yield return unityWeb.SendWebRequest();
 
@@ -81,14 +142,14 @@ public class Scoreboard : MonoBehaviour
         submitScore = false;
     }
 
-    IEnumerator GetScoreBoard()
+    private IEnumerator GetScoreBoard()
     {
-        login.isLoading = true;
+        isLoading = true;
 
         WWWForm wWWForm = new();
-        wWWForm.AddField("username", login.Username);
+        wWWForm.AddField("username", Username);
 
-        using(UnityWebRequest unityWeb = UnityWebRequest.Post(login.url + "scoreboard.php", wWWForm))
+        using (UnityWebRequest unityWeb = UnityWebRequest.Post(url + "scoreboard.php", wWWForm))
         {
             yield return unityWeb.SendWebRequest();
             if (unityWeb.result == UnityWebRequest.Result.ConnectionError)
@@ -131,67 +192,6 @@ public class Scoreboard : MonoBehaviour
                 }
             }
         }
-        login.isLoading = false;
-    }
-
-    private void OnGUI()
-    {
-        if (showScoreboard)
-        {
-            GUI.Window(1, new Rect(Screen.width / 2 - 300, Screen.height / 2 - 225, 600, 460), ScoreBoardRendering, "ScoreBoard");
-        }
-        if (!login.isLogged)
-        {
-            showScoreboard = false;
-            currentScore = 0;
-        }
-        else
-        {
-            GUI.Box(new Rect(Screen.width / 2 - 65, 5, 120, 25), currentScore.ToString());
-            if(GUI.Button(new Rect(5, 60, 100, 25), "ScoreBoard"))
-            {
-                showScoreboard = !showScoreboard;
-                if (!login.isLoading)
-                {
-                    StartCoroutine(GetScoreBoard());
-                }
-            }
-        }
-    }
-
-    void ScoreBoardRendering(int idx)
-    {
-        if (login.isLoading)
-        {
-            GUILayout.Label("Loading...");
-        }
-        else
-        {
-            GUILayout.BeginHorizontal();
-            GUI.color = Color.green;
-            GUILayout.Label("Your Rank is " + (playerRank > 0 ? playerRank.ToString() : "not ranked"));
-            GUILayout.Label("Highest Score: " + highestScore.ToString());
-            GUI.color = Color.white;
-            GUILayout.EndHorizontal();
-
-            scroll = GUILayout.BeginScrollView(scroll, false, true);
-
-            for(var i = 0; i < scoreboardUsers.Length; i++)
-            {
-                GUILayout.BeginHorizontal("box");
-
-                if (scoreboardUsers[i].username == login.Username)
-                {
-                    GUI.color = Color.green;
-                }
-                GUILayout.Label((i + 1).ToString(), GUILayout.Width(30));
-                GUILayout.Label(scoreboardUsers[i].username, GUILayout.Width(230));
-
-                GUILayout.Label(scoreboardUsers[i].score.ToString());
-                GUI.color = Color.white;
-                GUILayout.EndHorizontal();
-            }
-            GUILayout.EndScrollView();
-        }
+        isLoading = false;
     }
 }

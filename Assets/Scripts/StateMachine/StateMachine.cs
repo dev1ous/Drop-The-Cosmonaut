@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 public class StateMachine : MonoBehaviour
 {
     public AsyncOperation asyncLoad;
-    public UnityEvent triggerEvent;
-    public UnityEvent triggerEventForExit;
+    public UnityEvent triggerEnter;
+    public UnityEvent triggerExit;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,9 +18,9 @@ public class StateMachine : MonoBehaviour
     {
     }
 
-    public void StartScene(string sceneName, string spawn)
+    public void StartScene(string sceneName)
     {
-        StartCoroutine(LoadNextScene(sceneName, spawn));
+        StartCoroutine(LoadNextScene(sceneName));
     }
 
     public void UnloadPreviousScene()
@@ -28,16 +28,14 @@ public class StateMachine : MonoBehaviour
         if (asyncLoad.allowSceneActivation)
         {
             SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene(), UnloadSceneOptions.None);
-            if (triggerEvent != null)
+            if (triggerEnter != null)
             {
-                triggerEvent.RemoveAllListeners();
-                triggerEventForExit.RemoveAllListeners();
-                triggerEvent = null;
-                triggerEventForExit = null;
+                triggerEnter.RemoveAllListeners();
+                triggerExit.RemoveAllListeners();
+                triggerEnter = null;
+                triggerExit = null;
             }
         }
-
-
     }
 
     private void EnableScene()
@@ -45,7 +43,7 @@ public class StateMachine : MonoBehaviour
         asyncLoad.allowSceneActivation = true;
     }
 
-    IEnumerator LoadNextScene(string sceneName, string spawn)
+    IEnumerator LoadNextScene(string sceneName)
     {
         asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         asyncLoad.allowSceneActivation = false;
@@ -54,10 +52,8 @@ public class StateMachine : MonoBehaviour
         {
             //if (asyncLoad.progress >= 0.9f)
                 
-            if (triggerEvent != null)
-                triggerEvent.AddListener(EnableScene);
-            if (triggerEventForExit != null)
-                triggerEventForExit.AddListener(UnloadPreviousScene);
+            if (triggerEnter != null)
+                triggerEnter.AddListener(EnableScene);
 
             yield return null;
         }

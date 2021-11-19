@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Login : MonoBehaviour
+public class Login : Network
 {
     public enum selectedOption
     {
@@ -19,14 +19,6 @@ public class Login : MonoBehaviour
     string registerPassword = "";
     string confirmPassword = "";
     string errorMessage = "";
-
-    public string Username = "";
-
-    public string url = "";
-
-    public bool isLogged = false;
-    public bool isRegistered = false;
-    public bool isLoading = false;
 
     
     // Start is called before the first frame update

@@ -236,7 +236,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84c234068e679843b8d2b4a2fe5f780, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  login: {fileID: 0}
+  Username: 
+  url: 
+  isLogged: 0
+  isRegistered: 0
+  isLoading: 0
+  showScoreboard: 1
 --- !u!4 &1307554820
 Transform:
   m_ObjectHideFlags: 0
