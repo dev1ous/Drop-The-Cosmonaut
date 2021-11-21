@@ -70,6 +70,11 @@ public class Character : MonoBehaviour
 
         transform.position += directionVector * moveSpeed * Time.deltaTime;
         transform.position += Vector3.down * fallingSpeed * Time.deltaTime;
+
+        if (Mathf.Abs(directionVector.x) > 0)        
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 15f, 0.1f, 40));        
+        else        
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
     }
 
     public void TakeDamage()
