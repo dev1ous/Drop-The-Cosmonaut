@@ -10,6 +10,7 @@ public class Character : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float fallingSpeed = 10f;
     public bool haveShield = false;
+    public float traveledDistance { get; private set; } = 0f;   
     private bool isAlive = true;
 
     [Header("Misc")]
@@ -70,9 +71,10 @@ public class Character : MonoBehaviour
 
         transform.position += directionVector * moveSpeed * Time.deltaTime;
         transform.position += Vector3.down * fallingSpeed * Time.deltaTime;
+        traveledDistance += fallingSpeed * Time.deltaTime;
 
         if (Mathf.Abs(directionVector.x) > 0)        
-            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 15f, 0.1f, 40));        
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 12f, 0.1f, 30));        
         else        
             transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
     }
