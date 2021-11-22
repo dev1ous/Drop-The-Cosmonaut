@@ -206,6 +206,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1790847803}
     m_Modifications:
+    - target: {fileID: -9082362208595849712, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.0074933562
+      objectReference: {fileID: 0}
+    - target: {fileID: -9082362208595849712, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0003722205
+      objectReference: {fileID: 0}
+    - target: {fileID: -9082362208595849712, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.008467161
+      objectReference: {fileID: 0}
+    - target: {fileID: -9082362208595849712, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.99993604
+      objectReference: {fileID: 0}
+    - target: {fileID: -9082362208595849712, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -9082362208595849712, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -9082362208595849712, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -224,11 +252,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.953717
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.30070576
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
       propertyPath: m_LocalRotation.y
@@ -240,7 +268,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 35
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -258,6 +286,13 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 1eb2a94e10e6ce04a810147e26b71d66, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
+      propertyPath: m_WarningMessage
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'mixamorig1:RightUpLeg'\n\tFrom animation
+        clip 'New Animation'"
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 963645aa1de1b6346be7232dff904c9d, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 1
@@ -1069,7 +1104,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 5
+  near clip plane: 6
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -1154,7 +1189,7 @@ MonoBehaviour:
   - {fileID: -6741674067505537129, guid: b4ebfe3d8ab4def429989cd25349eb90, type: 3}
   - {fileID: -4199729643614153330, guid: c9816fa979b06ba4e9c222b529370cc2, type: 3}
   - {fileID: 6503218741288611949, guid: c8b6a28265cff5e4cb4355af1a24cfba, type: 3}
-  offset: 20
+  offset: 30
 --- !u!4 &1323781854
 Transform:
   m_ObjectHideFlags: 0
