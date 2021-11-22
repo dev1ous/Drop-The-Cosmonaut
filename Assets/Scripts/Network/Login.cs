@@ -24,7 +24,7 @@ public class Login : Network
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine(ConnectToDb());
     }
 
     // Update is called once per frame
@@ -33,19 +33,37 @@ public class Login : Network
 
     }
 
+    IEnumerator ConnectToDb()
+    {
+        using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(url + "database.php", ""))
+        {
+            Debug.Log(url + "database.php");
+            yield return unityWebRequest.SendWebRequest();
+            if(unityWebRequest.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("CONNECTED");
+            }
+            else
+            {
+                Debug.LogError(unityWebRequest.error);
+            }
+
+        }
+    }
+
     private void OnGUI()
     {
         if (!isLogged)
         {
             if(selected == selectedOption.Login)
             {
-                GUI.Window(0, new Rect(Screen.width / 2 -75, 
+                GUI.Window(0, new Rect(Screen.width / 2 - 75,
                     Screen.height / 2 - 105, 150, 230), LoginFunc, "Login");
             }
             else if(selected == selectedOption.Register)
             {
-                GUI.Window(0, new Rect(Screen.width / 2 -75, 
-                    Screen.height / 2 - 105, 50, 330), RegisterFunc, "Register");
+                GUI.Window(0, new Rect(Screen.width / 2 - 75,
+                    Screen.height / 2 - 105, 150, 260), RegisterFunc, "Register");
             }
         }
 
@@ -94,7 +112,7 @@ public class Login : Network
         }
 
         GUILayout.FlexibleSpace();
-        GUILayout.Label("Do you have an account?");
+        GUILayout.Label("Didn't have an account yet?");
 
         if (GUILayout.Button("Register", GUILayout.Width(125)))
         {
@@ -131,9 +149,7 @@ public class Login : Network
             StartCoroutine(RegisterNetwork());
         }
 
-        GUILayout.FlexibleSpace();
-        GUILayout.Label("Have you already an account ?");
-        if(GUILayout.Button("Login", GUILayout.Width(125)))
+        if(GUILayout.Button("Oups...what a\n terrible goldfish\n memory i have", GUILayout.Width(130), GUILayout.Height(50)))
         {
             ResetInfosData();
             selected = selectedOption.Login;
@@ -198,6 +214,7 @@ public class Login : Network
             else
             {
                 string responseText = unityWeb.downloadHandler.text;
+                Debug.Log(responseText);
                 if(responseText.StartsWith("Success"))
                 {
                     isLogged = true;

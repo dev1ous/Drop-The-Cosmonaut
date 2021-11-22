@@ -6,7 +6,7 @@ public class Network : MonoBehaviour
 {
     public string Username = "";
 
-    public string url = "";
+    public string url = "localhost/Runner/";
 
     public bool isLogged = false;
     public bool isRegistered = false;
