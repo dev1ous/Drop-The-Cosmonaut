@@ -16,6 +16,7 @@ public class Character : MonoBehaviour
     [Header("Misc")]
     [SerializeField] private Camera cam = null;
     [SerializeField] private BoxCollider ModelSize = null;
+    [SerializeField] private DeathMenu deathMenu = null;
     private Touch touchInput;
     private bool isTouch = false;
     private Vector2 touchScreenPosition;
@@ -94,8 +95,9 @@ public class Character : MonoBehaviour
         else
         {
             isAlive = false;
+            deathMenu.gameObject.SetActive(true);
             gameObject.SetActive(false);
-            Time.timeScale = 0f;
+            //Time.timeScale = 0f;
             return true;
         }
 
