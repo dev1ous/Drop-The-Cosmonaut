@@ -21,7 +21,7 @@ public class Character : MonoBehaviour
     private bool isTouch = false;
     private Vector2 touchScreenPosition;
     private Vector2 onPressScreenPosition;
-    private Vector3 gyrotest;
+    private Vector3 gyroValue;
 
     private void OnEnable()
     {
@@ -44,11 +44,12 @@ public class Character : MonoBehaviour
 
     void Update()
     {
+        // get movement 
         Vector3 directionVector = Vector3.zero;
         if (Input.gyro.enabled)
         {
-            gyrotest += new Vector3(Input.gyro.rotationRateUnbiased.y, 0f, -Input.gyro.rotationRateUnbiased.x);
-            directionVector = gyrotest / 5f;
+            gyroValue += new Vector3(Input.gyro.rotationRateUnbiased.y, 0f, -Input.gyro.rotationRateUnbiased.x);
+            directionVector = gyroValue / 5f;
         }
         else if (isTouch)
         {
@@ -57,7 +58,19 @@ public class Character : MonoBehaviour
             directionVector = touchPositionToWorld - onPressPositionToWorld;
         }
 
+        // rotations
+        if (Mathf.Abs(directionVector.x) > 0)        
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 15f, 0.1f, 30));        
+        else        
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
 
+        if (Mathf.Abs(directionVector.z) > 0)        
+            transform.localEulerAngles = new Vector3(Mathf.Sign(directionVector.z) * Mathf.Clamp(Mathf.Abs(directionVector.z) * 6f, 0.1f, 25), transform.localEulerAngles.y, transform.localEulerAngles.z);        
+        else        
+            transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);        
+
+
+        // movement claming
         if (cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x > 1f ||
             cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + -ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x < 0f)
         {
@@ -70,25 +83,13 @@ public class Character : MonoBehaviour
             directionVector.z = 0;
         }
 
+        // movement
         transform.position += directionVector * moveSpeed * Time.deltaTime;
         transform.position += Vector3.down * fallingSpeed * Time.deltaTime;
         traveledDistance += fallingSpeed * Time.deltaTime;
-
-        if (Mathf.Abs(directionVector.x) > 0)        
-            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 12f, 0.1f, 30));        
-        else        
-            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
     }
 
     public void TakeDamage()
-    {
-        if (haveShield)
-            haveShield = false;
-        else
-            Death();
-    }
-
-    private bool Death()
     {
         if (haveShield)
             haveShield = false;
@@ -97,11 +98,7 @@ public class Character : MonoBehaviour
             isAlive = false;
             deathMenu.gameObject.SetActive(true);
             gameObject.SetActive(false);
-            //Time.timeScale = 0f;
-            return true;
         }
-
-        return false;
     }
 
     private void TouchPosition(InputAction.CallbackContext context)
