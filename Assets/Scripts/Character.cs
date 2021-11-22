@@ -18,6 +18,7 @@ public class Character : MonoBehaviour
     [SerializeField] private BoxCollider ModelSize = null;
     [SerializeField] private DeathMenu deathMenu = null;
     [SerializeField] private GameObject shield = null;
+    [SerializeField] private ParticleSystem speedEffect = null;
     private Touch touchInput;
     private bool isTouch = false;
     private Vector2 touchScreenPosition;
@@ -91,6 +92,7 @@ public class Character : MonoBehaviour
 
 
         shield.SetActive(haveShield);
+        //speedEffect.gameObject.SetActive(speedboost variable);
         shield.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
     }
 
