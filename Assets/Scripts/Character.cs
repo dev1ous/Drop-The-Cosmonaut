@@ -7,9 +7,14 @@ public class Character : MonoBehaviour
 {
     [Header("Stats")]
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float fallingSpeed = 10f;
+    [SerializeField] private float defaultFallingSpeed = 10f;
+    [SerializeField] private float fallingAccel = 0.05f;
+    [SerializeField] private float fallingDecrementMultiplier = 1.25f;
+    [SerializeField] private float maxfallingSpeed = 200f;
+    private float currentFallingSpeed;
     public bool haveShield = false;
     public float traveledDistance { get; private set; } = 0f;
+    public int score { get; private set; } = 0;
 
     [Header("Misc")]
     [SerializeField] private Camera cam = null;
@@ -34,6 +39,8 @@ public class Character : MonoBehaviour
 
     void Awake()
     {
+        currentFallingSpeed = defaultFallingSpeed;
+
         touchInput = new Touch();
         touchInput.Mobile.Position.performed += TouchPosition;
         touchInput.Mobile.Touch.performed += TouchPress;
@@ -86,9 +93,13 @@ public class Character : MonoBehaviour
         // movement
         directionVector.y = 0f;
         transform.position += directionVector * moveSpeed * Time.deltaTime;
-        transform.position += Vector3.down * fallingSpeed * Time.deltaTime;
-        traveledDistance += fallingSpeed * Time.deltaTime;
+        transform.position += Vector3.down * currentFallingSpeed * Time.deltaTime;
+        traveledDistance += currentFallingSpeed * Time.deltaTime;
         directionVector -= (directionVector * moveSpeed * Time.deltaTime) / 2.5f;
+        score = (int)traveledDistance;
+        currentFallingSpeed += fallingAccel * Time.deltaTime;
+
+        currentFallingSpeed = Mathf.Clamp(currentFallingSpeed, 0f, maxfallingSpeed);
     }
 
     public void TakeDamage()
@@ -101,6 +112,7 @@ public class Character : MonoBehaviour
         if (haveShield)
         {
             haveShield = false;
+            currentFallingSpeed /= fallingDecrementMultiplier;
         }
         else
         {
