@@ -26,6 +26,12 @@ public class MenuCamera : MonoBehaviour
         lookat = Lookat.MAINMENU;
     }
 
+    public void LookOptionToMainMenu()
+    {
+        lookat = Lookat.MAINMENU;
+        OptionMenu.Save();
+    }
+
     public void LookOptionMenu()
     {
         lookat = Lookat.OPTION;
