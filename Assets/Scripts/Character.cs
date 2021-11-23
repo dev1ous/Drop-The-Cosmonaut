@@ -42,10 +42,10 @@ public class Character : MonoBehaviour
         Input.gyro.updateInterval = 0f;
     }
 
+        Vector3 directionVector = Vector3.zero;
     void Update()
     {
         // get movement 
-        Vector3 directionVector = Vector3.zero;
         if (OptionMenu.settings.gyroEnabled)
         {
             gyroValue += new Vector3(Input.gyro.rotationRateUnbiased.y, 0f, -Input.gyro.rotationRateUnbiased.x);
@@ -53,9 +53,11 @@ public class Character : MonoBehaviour
         }
         else if (isTouch)
         {
-            Vector3 onPressPositionToWorld = cam.ScreenToWorldPoint(new Vector3(onPressScreenPosition.x, onPressScreenPosition.y, 10f));
-            Vector3 touchPositionToWorld = cam.ScreenToWorldPoint(new Vector3(touchScreenPosition.x, touchScreenPosition.y, 10f));
-            directionVector = touchPositionToWorld - onPressPositionToWorld;
+            Vector3 onPressPositionToWorld = cam.ScreenToWorldPoint(new Vector3(onPressScreenPosition.x, onPressScreenPosition.y, 8.5f));
+            Vector3 touchPositionToWorld = cam.ScreenToWorldPoint(new Vector3(touchScreenPosition.x, touchScreenPosition.y, 8.5f));
+            directionVector += (touchPositionToWorld - onPressPositionToWorld) * 1.10f;
+
+            onPressScreenPosition = touchScreenPosition;
         }
 
         // rotations
@@ -82,10 +84,13 @@ public class Character : MonoBehaviour
             directionVector.z = 0;
         }
 
+
         // movement
+        directionVector.y = 0f;
         transform.position += directionVector * moveSpeed * Time.deltaTime;
         transform.position += Vector3.down * fallingSpeed * Time.deltaTime;
         traveledDistance += fallingSpeed * Time.deltaTime;
+        directionVector -= (directionVector * moveSpeed * Time.deltaTime) / 2.5f;
     }
 
     public void TakeDamage()
