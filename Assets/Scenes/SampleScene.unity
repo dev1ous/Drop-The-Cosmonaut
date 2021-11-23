@@ -1974,7 +1974,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1.25
-  fallingSpeed: 10
+  defaultFallingSpeed: 10
+  fallingAccel: 0.075
+  fallingDecrementMultiplier: 1.25
+  maxfallingSpeed: 200
   haveShield: 0
   cam: {fileID: 963194227}
   ModelSize: {fileID: 1790847804}
