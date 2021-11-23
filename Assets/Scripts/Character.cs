@@ -19,6 +19,7 @@ public class Character : MonoBehaviour
     [SerializeField] private DeathMenu deathMenu = null;
     [SerializeField] private GameObject shield = null;
     [SerializeField] private ParticleSystem speedEffect = null;
+    [SerializeField] private ParticleSystem shieldBreakEffect = null;
     private Touch touchInput;
     private bool isTouch = false;
     private Vector2 touchScreenPosition;
@@ -104,7 +105,10 @@ public class Character : MonoBehaviour
         }
 
         if (haveShield)
+        {
             haveShield = false;
+            shieldBreakEffect.Play();
+        }
         else
         {
             isAlive = false;
