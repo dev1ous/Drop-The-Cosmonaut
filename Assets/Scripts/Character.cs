@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class Character : MonoBehaviour
@@ -10,8 +9,7 @@ public class Character : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float fallingSpeed = 10f;
     public bool haveShield = false;
-    public float traveledDistance { get; private set; } = 0f;   
-    private bool isAlive = true;
+    public float traveledDistance { get; private set; } = 0f;
 
     [Header("Misc")]
     [SerializeField] private Camera cam = null;
@@ -22,6 +20,7 @@ public class Character : MonoBehaviour
     private Vector2 touchScreenPosition;
     private Vector2 onPressScreenPosition;
     private Vector3 gyroValue;
+    private Vector3 directionVector;
 
     private void OnEnable()
     {
@@ -42,7 +41,6 @@ public class Character : MonoBehaviour
         Input.gyro.updateInterval = 0f;
     }
 
-        Vector3 directionVector = Vector3.zero;
     void Update()
     {
         // get movement 
@@ -61,14 +59,14 @@ public class Character : MonoBehaviour
         }
 
         // rotations
-        if (Mathf.Abs(directionVector.x) > 0)        
-            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 15f, 0.1f, 30));        
-        else        
+        if (Mathf.Abs(directionVector.x) > 0)
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 15f, 0.1f, 30));
+        else
             transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
 
-        if (Mathf.Abs(directionVector.z) > 0)        
-            transform.localEulerAngles = new Vector3(Mathf.Sign(directionVector.z) * Mathf.Clamp(Mathf.Abs(directionVector.z) * 6f, 0.1f, 25), transform.localEulerAngles.y, transform.localEulerAngles.z);        
-        else        
+        if (Mathf.Abs(directionVector.z) > 0)
+            transform.localEulerAngles = new Vector3(Mathf.Sign(directionVector.z) * Mathf.Clamp(Mathf.Abs(directionVector.z) * 6f, 0.1f, 25), transform.localEulerAngles.y, transform.localEulerAngles.z);
+        else
             transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
 
         // movement claming
@@ -101,10 +99,11 @@ public class Character : MonoBehaviour
         }
 
         if (haveShield)
+        {
             haveShield = false;
+        }
         else
         {
-            isAlive = false;
             deathMenu.gameObject.SetActive(true);
             gameObject.SetActive(false);
         }
