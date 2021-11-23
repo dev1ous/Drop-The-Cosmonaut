@@ -154,6 +154,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1695319198 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 344162264035926572, guid: 8a47d92ed3f9e1549984cc193f9d58e4, type: 3}
+  m_PrefabInstance: {fileID: 344162262685789194}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1695319199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695319198}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e84c234068e679843b8d2b4a2fe5f780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Username: greg
+  url: http://localhost:80/Runner/
+  isLogged: 1
+  isRegistered: 1
+  isLoading: 0
+  showScoreboard: 0
 --- !u!1 &1853868500
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,7 +364,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 344162264035926562, guid: 8a47d92ed3f9e1549984cc193f9d58e4, type: 3}
       propertyPath: url
-      value: localhost/Runner/
+      value: http://localhost:80/Runner/
+      objectReference: {fileID: 0}
+    - target: {fileID: 344162264035926562, guid: 8a47d92ed3f9e1549984cc193f9d58e4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 344162264035926563, guid: 8a47d92ed3f9e1549984cc193f9d58e4, type: 3}
       propertyPath: m_RootOrder

@@ -12,6 +12,7 @@ public class Scoreboard : Network
     bool submitScore = false;
     int highestScore = 0;
     int playerRank = -1;
+    bool scorebordResult = false;
 
     [System.Serializable]
     public class ScoreboardUser
@@ -45,17 +46,24 @@ public class Scoreboard : Network
         {
             delayScoreSubmit = 3;
         }
+        if (Input.GetKeyDown(KeyCode.T))
+            currentScore += 5;
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            StartCoroutine(SubmitScore(currentScore));
+        }
     }
 
     private void OnGUI()
     {
-        if (showScoreboard)
+        if (showScoreboard && scorebordResult)
         {
             GUI.Window(1, new Rect(Screen.width / 2 - 300, Screen.height / 2 - 225, 600, 460), ScoreBoardRendering, "ScoreBoard");
         }
         if (!isLogged)
         {
-            //showScoreboard = false;
+            showScoreboard = false;
             currentScore = 0;
         }
         else
@@ -117,7 +125,7 @@ public class Scoreboard : Network
         wWWForm.AddField("username", Username);
         wWWForm.AddField("score", score);
 
-        using (UnityWebRequest unityWeb = UnityWebRequest.Post(url + "score.php", wWWForm))
+        using (UnityWebRequest unityWeb = UnityWebRequest.Post(url + "submit_score.php", wWWForm))
         {
             yield return unityWeb.SendWebRequest();
 
@@ -131,7 +139,7 @@ public class Scoreboard : Network
 
                 if (responseText.StartsWith("Success"))
                 {
-                    print("New Score submitted");
+                    print( responseText + " : New Score submitted");
                 }
                 else
                 {
@@ -144,6 +152,7 @@ public class Scoreboard : Network
 
     private IEnumerator GetScoreBoard()
     {
+        scorebordResult = false;
         isLoading = true;
 
         WWWForm wWWForm = new();
@@ -160,7 +169,7 @@ public class Scoreboard : Network
             {
                 string responseText = unityWeb.downloadHandler.text;
 
-                if (responseText.StartsWith("User"))
+                if (responseText.StartsWith("Success"))
                 {
                     string[] dataChunks = responseText.Split("|");
 
@@ -185,6 +194,7 @@ public class Scoreboard : Network
                         user.score = int.Parse(tmp[1]);
                         scoreboardUsers[i - 1] = user;
                     }
+                    scorebordResult = true;
                 }
                 else
                 {

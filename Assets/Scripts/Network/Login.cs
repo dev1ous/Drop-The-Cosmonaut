@@ -39,6 +39,7 @@ public class Login : Network
         {
             Debug.Log(url + "database.php");
             yield return unityWebRequest.SendWebRequest();
+
             if(unityWebRequest.result == UnityWebRequest.Result.Success)
             {
                 Debug.Log("CONNECTED");
