@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class ObstacleManagerScript : MonoBehaviour
 {
-    [SerializeField] private Camera cam;
-    [SerializeField] private GameManager gm;
-    [SerializeField] private ObstacleScript[] obstacles;
+    [SerializeField] protected Camera cam;
+    [SerializeField] protected GameManager gm;
+    [SerializeField] protected ObstacleScript[] obstacles;
 
-    [SerializeField] private float offset;
+    [SerializeField] protected float offset;
 
-    Vector3 pos;
+    protected Vector3 pos;
 
     float timer;
     private float spawnDelay;
@@ -21,13 +21,13 @@ public class ObstacleManagerScript : MonoBehaviour
             obs.gm = this.gm;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         float viewportOffset = cam.transform.position.y - gm.player.transform.position.y;
 
-        pos = new Vector3(Random.Range(cam.ViewportToWorldPoint(new Vector3(0.3f, 0, viewportOffset)).x, cam.ViewportToWorldPoint(new Vector3(1, 1, viewportOffset)).x),
+        pos = new Vector3(Random.Range(cam.ViewportToWorldPoint(new Vector3(0f, 0, viewportOffset)).x, cam.ViewportToWorldPoint(new Vector3(1, 1, viewportOffset)).x),
                           gm.player.transform.position.y - offset,
-                          Random.Range(cam.ViewportToWorldPoint(new Vector3(0f, 0, viewportOffset)).z, cam.ViewportToWorldPoint(new Vector3(1, 1, viewportOffset)).z));
+                          Random.Range(cam.ViewportToWorldPoint(new Vector3(0f, 0, viewportOffset)).z, cam.ViewportToWorldPoint(new Vector3(0, 0, viewportOffset)).z));
 
         transform.position = pos;
 
