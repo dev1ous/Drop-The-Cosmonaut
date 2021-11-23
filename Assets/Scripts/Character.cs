@@ -46,7 +46,7 @@ public class Character : MonoBehaviour
     {
         // get movement 
         Vector3 directionVector = Vector3.zero;
-        if (Input.gyro.enabled)
+        if (OptionMenu.settings.gyroEnabled)
         {
             gyroValue += new Vector3(Input.gyro.rotationRateUnbiased.y, 0f, -Input.gyro.rotationRateUnbiased.x);
             directionVector = gyroValue / 5f;
@@ -67,18 +67,17 @@ public class Character : MonoBehaviour
         if (Mathf.Abs(directionVector.z) > 0)        
             transform.localEulerAngles = new Vector3(Mathf.Sign(directionVector.z) * Mathf.Clamp(Mathf.Abs(directionVector.z) * 6f, 0.1f, 25), transform.localEulerAngles.y, transform.localEulerAngles.z);        
         else        
-            transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);        
-
+            transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
 
         // movement claming
-        if (cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x > 1f ||
-            cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + -ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x < 0f)
+        if ((cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x > 1f && directionVector.x > 0) ||
+            (cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + -ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x < 0f && directionVector.x < 0))
         {
             directionVector.x = 0;
         }
 
-        if (cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y > 1f ||
-            cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + -ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y < 0f)
+        if ((cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y > 1f && directionVector.z > 0) ||
+            (cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + -ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y < 0f && directionVector.z < 0))
         {
             directionVector.z = 0;
         }
@@ -91,6 +90,11 @@ public class Character : MonoBehaviour
 
     public void TakeDamage()
     {
+        if (OptionMenu.settings.vibrationEnabled)
+        {
+            Vibration.Vibrate(250);
+        }
+
         if (haveShield)
             haveShield = false;
         else

@@ -1182,7 +1182,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gm: {fileID: 756886912}
-  shield: {fileID: 7134589776516793087, guid: b13a703252010f44685d05b3a1c3f9b9, type: 3}
+  cam: {fileID: 963194227}
+  shield: {fileID: -3119044743964925476, guid: 4e0345a1581e0b94ca6fcc4ad814ed03, type: 3}
   offset: 10
   spawnBonusDistance: 5
 --- !u!4 &1141648767
