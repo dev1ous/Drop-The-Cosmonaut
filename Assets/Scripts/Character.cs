@@ -10,7 +10,7 @@ public class Character : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float defaultFallingSpeed = 10f;
     [SerializeField] private float fallingAccel = 0.05f;
-    [SerializeField] private float fallingDecrementMultiplier = 1.25f;
+    [SerializeField] private float fallingDecrementMultiplier = 1.2f;
     [SerializeField] private float maxfallingSpeed = 200f;
     [SerializeField] private float maxFuel = 200f;
     [SerializeField] private float speedBoost = 10f;
@@ -18,9 +18,12 @@ public class Character : MonoBehaviour
     private float currentFallingSpeed;
     private float currentFuel;
     private bool isSpeedBoost = false; 
+
     public bool haveShield = false;
     public float traveledDistance { get; private set; } = 0f;
     public int score { get; private set; } = 0;
+
+
 
     [Header("Misc")]
     [SerializeField] private Camera cam = null;
@@ -32,11 +35,13 @@ public class Character : MonoBehaviour
     [SerializeField] private ParticleSystem speedEffect = null;
     [SerializeField] private ParticleSystem shieldBreakEffect = null;
     private Touch touchInput;
-    private bool isTouch = false;
     private Vector2 touchScreenPosition;
     private Vector2 onPressScreenPosition;
     private Vector3 gyroValue;
     private Vector3 directionVector;
+    private bool isTouch = false;
+
+
 
     private void OnEnable()
     {
@@ -71,7 +76,7 @@ public class Character : MonoBehaviour
         {
             Vector3 onPressPositionToWorld = cam.ScreenToWorldPoint(new Vector3(onPressScreenPosition.x, onPressScreenPosition.y, 8.5f));
             Vector3 touchPositionToWorld = cam.ScreenToWorldPoint(new Vector3(touchScreenPosition.x, touchScreenPosition.y, 8.5f));
-            directionVector += (touchPositionToWorld - onPressPositionToWorld) * 1.10f;
+            directionVector += (touchPositionToWorld - onPressPositionToWorld) * 1.15f;
 
             onPressScreenPosition = touchScreenPosition;
         }
@@ -126,10 +131,13 @@ public class Character : MonoBehaviour
                 currentFallingSpeed -= speedBoost;
             }
         }
+
         shield.SetActive(haveShield);
-        //speedEffect.gameObject.SetActive(speedboost variable);
+        speedEffect.gameObject.SetActive(isSpeedBoost);
         shield.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
     }
+
+
 
     public void TakeDamage()
     {
