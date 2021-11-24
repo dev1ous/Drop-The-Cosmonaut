@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MenuCamera : MonoBehaviour
 {
-    public enum Lookat { MAINMENU, OPTION }
+    public enum Lookat { MAINMENU, OPTION, CREDIT }
     
     [SerializeField] private Camera usedCamera = null;
     private Lookat lookat = Lookat.MAINMENU;
@@ -19,6 +19,10 @@ public class MenuCamera : MonoBehaviour
         {
             usedCamera.transform.rotation = Quaternion.Euler(0f, Mathf.MoveTowardsAngle(usedCamera.transform.rotation.eulerAngles.y, 90, 180f * Time.deltaTime), 0f);
         }
+        else if (lookat == Lookat.CREDIT)
+        {
+            usedCamera.transform.rotation = Quaternion.Euler(0f, Mathf.MoveTowardsAngle(usedCamera.transform.rotation.eulerAngles.y, -90, 180f * Time.deltaTime), 0f);
+        }
     }
 
     public void LookMainMenu()
@@ -26,8 +30,19 @@ public class MenuCamera : MonoBehaviour
         lookat = Lookat.MAINMENU;
     }
 
+    public void LookOptionToMainMenu()
+    {
+        lookat = Lookat.MAINMENU;
+        OptionMenu.Save();
+    }
+
     public void LookOptionMenu()
     {
         lookat = Lookat.OPTION;
+    }
+
+    public void LookCredits()
+    {
+        lookat = Lookat.CREDIT;
     }
 }
