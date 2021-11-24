@@ -28,6 +28,9 @@ public class Character : MonoBehaviour
     [SerializeField] private DeathMenu deathMenu = null;
     [SerializeField] private Text scoreText = null;
     [SerializeField] private Image fuelFillBar = null;
+    [SerializeField] private GameObject shield = null;
+    [SerializeField] private ParticleSystem speedEffect = null;
+    [SerializeField] private ParticleSystem shieldBreakEffect = null;
     private Touch touchInput;
     private bool isTouch = false;
     private Vector2 touchScreenPosition;
@@ -84,6 +87,7 @@ public class Character : MonoBehaviour
         else
             transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
 
+
         // movement claming
         if ((cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x > 1f && directionVector.x > 0) ||
             (cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + -ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x < 0f && directionVector.x < 0))
@@ -122,6 +126,9 @@ public class Character : MonoBehaviour
                 currentFallingSpeed -= speedBoost;
             }
         }
+        shield.SetActive(haveShield);
+        //speedEffect.gameObject.SetActive(speedboost variable);
+        shield.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
     }
 
     public void TakeDamage()
@@ -134,6 +141,7 @@ public class Character : MonoBehaviour
         if (haveShield)
         {
             haveShield = false;
+            shieldBreakEffect.Play();
             currentFallingSpeed /= fallingDecrementMultiplier;
         }
         else
