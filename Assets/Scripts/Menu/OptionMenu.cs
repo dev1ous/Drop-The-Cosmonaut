@@ -8,31 +8,23 @@ public class OptionMenu : MonoBehaviour
     [SerializeField] private Button touchButton = null;
     [SerializeField] private Button gyroButton = null;
 
-    private Image touchImage = null;
-    private Image gyroImage = null;
-
     void Start()
     {
         if (SystemInfo.supportsGyroscope == false)
         {
             gyroButton.interactable = false;
         }
-
-        touchImage = touchButton.GetComponent<Image>();
-        gyroImage = gyroButton.GetComponent<Image>();
     }
 
     void Update()
     {
         if (Input.gyro.enabled)
         {
-            touchImage.color = Color.white;
-            gyroImage.color = Color.cyan;
+            gyroButton.Select();
         }
         else
         {
-            touchImage.color = Color.cyan;
-            gyroImage.color = Color.white;
+            touchButton.Select();
         }
     }
 
