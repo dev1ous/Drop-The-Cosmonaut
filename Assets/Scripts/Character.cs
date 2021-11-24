@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class Character : MonoBehaviour
@@ -11,7 +12,12 @@ public class Character : MonoBehaviour
     [SerializeField] private float fallingAccel = 0.05f;
     [SerializeField] private float fallingDecrementMultiplier = 1.25f;
     [SerializeField] private float maxfallingSpeed = 200f;
+    [SerializeField] private float maxFuel = 200f;
+    [SerializeField] private float speedBoost = 10f;
+    [SerializeField] private float fuelConsumtion = 10f;
     private float currentFallingSpeed;
+    private float currentFuel;
+    private bool isSpeedBoost = false; 
     public bool haveShield = false;
     public float traveledDistance { get; private set; } = 0f;
     public int score { get; private set; } = 0;
@@ -20,6 +26,8 @@ public class Character : MonoBehaviour
     [SerializeField] private Camera cam = null;
     [SerializeField] private BoxCollider ModelSize = null;
     [SerializeField] private DeathMenu deathMenu = null;
+    [SerializeField] private Text scoreText = null;
+    [SerializeField] private Image fuelFillBar = null;
     private Touch touchInput;
     private bool isTouch = false;
     private Vector2 touchScreenPosition;
@@ -100,6 +108,20 @@ public class Character : MonoBehaviour
         currentFallingSpeed += fallingAccel * Time.deltaTime;
 
         currentFallingSpeed = Mathf.Clamp(currentFallingSpeed, 0f, maxfallingSpeed);
+        scoreText.text = score.ToString();
+        fuelFillBar.fillAmount = currentFuel / maxFuel;
+
+        if (isSpeedBoost)
+        {
+            currentFuel -= fuelConsumtion * Time.deltaTime;
+
+            if (currentFuel <= 0f)
+            {
+                currentFuel = 0f;
+                isSpeedBoost = false;
+                currentFallingSpeed -= speedBoost;
+            }
+        }
     }
 
     public void TakeDamage()
@@ -136,4 +158,19 @@ public class Character : MonoBehaviour
     {
         isTouch = false;
     }
+
+    public void AddFuel(float value)
+    {
+        if (isSpeedBoost == false)
+        {
+            currentFuel += value;
+            if (currentFuel >= maxFuel)
+            {
+                currentFuel = maxFuel;
+                isSpeedBoost = true;
+                currentFallingSpeed += speedBoost;
+            }
+        }
+    }
+
 }

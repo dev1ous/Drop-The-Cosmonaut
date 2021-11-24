@@ -2228,7 +2228,7 @@ MonoBehaviour:
   fallingAccel: 0.075
   fallingDecrementMultiplier: 1.25
   maxfallingSpeed: 200
-  maxFuel: 30
+  maxFuel: 150
   speedBoost: 10
   fuelConsumtion: 10
   haveShield: 0
