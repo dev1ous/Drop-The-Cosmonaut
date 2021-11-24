@@ -1,21 +1,21 @@
 using UnityEngine;
-
 public class ShieldScript : MonoBehaviour
 {
-    GameManager gm;
+    [HideInInspector] public GameManager gm;
 
-    private void Start()
+    private void Update()
     {
-        gm = FindObjectOfType<GameManager>();
+        transform.Rotate(new Vector3(.5f, .5f, .5f));
+
+        if (gameObject.transform.position.y > gm.player.transform.position.y + 10f)
+            Destroy(gameObject);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.collider.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             gm.player.haveShield = true;
-            Destroy(gameObject);
         }
     }
-
 }
