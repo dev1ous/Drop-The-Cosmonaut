@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class Character : MonoBehaviour
 {
     [Header("Stats")]
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float fallingSpeed = 10f;
+    [SerializeField] private float defaultFallingSpeed = 10f;
+    [SerializeField] private float fallingAccel = 0.05f;
+    [SerializeField] private float fallingDecrementMultiplier = 1.25f;
+    [SerializeField] private float maxfallingSpeed = 200f;
+    private float currentFallingSpeed;
     public bool haveShield = false;
     public float traveledDistance { get; private set; } = 0f;
-    private bool isAlive = true;
+    public int score { get; private set; } = 0;
 
     [Header("Misc")]
     [SerializeField] private Camera cam = null;
@@ -25,6 +28,7 @@ public class Character : MonoBehaviour
     private Vector2 touchScreenPosition;
     private Vector2 onPressScreenPosition;
     private Vector3 gyroValue;
+    private Vector3 directionVector;
 
     private void OnEnable()
     {
@@ -38,6 +42,8 @@ public class Character : MonoBehaviour
 
     void Awake()
     {
+        currentFallingSpeed = defaultFallingSpeed;
+
         touchInput = new Touch();
         touchInput.Mobile.Position.performed += TouchPosition;
         touchInput.Mobile.Touch.performed += TouchPress;
@@ -48,7 +54,6 @@ public class Character : MonoBehaviour
     void Update()
     {
         // get movement 
-        Vector3 directionVector = Vector3.zero;
         if (OptionMenu.settings.gyroEnabled)
         {
             gyroValue += new Vector3(Input.gyro.rotationRateUnbiased.y, 0f, -Input.gyro.rotationRateUnbiased.x);
@@ -56,9 +61,11 @@ public class Character : MonoBehaviour
         }
         else if (isTouch)
         {
-            Vector3 onPressPositionToWorld = cam.ScreenToWorldPoint(new Vector3(onPressScreenPosition.x, onPressScreenPosition.y, 10f));
-            Vector3 touchPositionToWorld = cam.ScreenToWorldPoint(new Vector3(touchScreenPosition.x, touchScreenPosition.y, 10f));
-            directionVector = touchPositionToWorld - onPressPositionToWorld;
+            Vector3 onPressPositionToWorld = cam.ScreenToWorldPoint(new Vector3(onPressScreenPosition.x, onPressScreenPosition.y, 8.5f));
+            Vector3 touchPositionToWorld = cam.ScreenToWorldPoint(new Vector3(touchScreenPosition.x, touchScreenPosition.y, 8.5f));
+            directionVector += (touchPositionToWorld - onPressPositionToWorld) * 1.10f;
+
+            onPressScreenPosition = touchScreenPosition;
         }
 
         // rotations
@@ -86,12 +93,17 @@ public class Character : MonoBehaviour
             directionVector.z = 0;
         }
 
+
         // movement
+        directionVector.y = 0f;
         transform.position += directionVector * moveSpeed * Time.deltaTime;
-        transform.position += Vector3.down * fallingSpeed * Time.deltaTime;
-        traveledDistance += fallingSpeed * Time.deltaTime;
+        transform.position += Vector3.down * currentFallingSpeed * Time.deltaTime;
+        traveledDistance += currentFallingSpeed * Time.deltaTime;
+        directionVector -= (directionVector * moveSpeed * Time.deltaTime) / 2.5f;
+        score = (int)traveledDistance;
+        currentFallingSpeed += fallingAccel * Time.deltaTime;
 
-
+        currentFallingSpeed = Mathf.Clamp(currentFallingSpeed, 0f, maxfallingSpeed);
         shield.SetActive(haveShield);
         //speedEffect.gameObject.SetActive(speedboost variable);
         shield.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
@@ -108,10 +120,10 @@ public class Character : MonoBehaviour
         {
             haveShield = false;
             shieldBreakEffect.Play();
+            currentFallingSpeed /= fallingDecrementMultiplier;
         }
         else
         {
-            isAlive = false;
             deathMenu.gameObject.SetActive(true);
             gameObject.SetActive(false);
         }
