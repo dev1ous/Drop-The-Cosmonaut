@@ -17,7 +17,7 @@ public class Character : MonoBehaviour
     [SerializeField] private float fuelConsumtion = 10f;
     private float currentFallingSpeed;
     private float currentFuel;
-    private bool isSpeedBoost = false; 
+    private bool isSpeedBoost = false;
 
     public bool haveShield = false;
     public float traveledDistance { get; private set; } = 0f;
@@ -34,12 +34,15 @@ public class Character : MonoBehaviour
     [SerializeField] private GameObject shield = null;
     [SerializeField] private ParticleSystem speedEffect = null;
     [SerializeField] private ParticleSystem shieldBreakEffect = null;
+    [SerializeField] private Animator anim = null;
     private Touch touchInput;
     private Vector2 touchScreenPosition;
     private Vector2 onPressScreenPosition;
     private Vector3 gyroValue;
     private Vector3 directionVector;
     private bool isTouch = false;
+    private Vector3 additionalRotation;
+    private float speedBoostAnimationTimer = 0f;
 
 
 
@@ -92,6 +95,8 @@ public class Character : MonoBehaviour
         else
             transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
 
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z) + additionalRotation;
+
 
         // movement claming
         if ((cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x > 1f && directionVector.x > 0) ||
@@ -122,6 +127,7 @@ public class Character : MonoBehaviour
 
         if (isSpeedBoost)
         {
+            speedBoostAnimationTimer += Time.deltaTime * 1.25f;
             currentFuel -= fuelConsumtion * Time.deltaTime;
 
             if (currentFuel <= 0f)
@@ -131,6 +137,17 @@ public class Character : MonoBehaviour
                 currentFallingSpeed -= speedBoost;
             }
         }
+        else
+        {
+            speedBoostAnimationTimer -= Time.deltaTime * 1.25f;
+
+        }
+
+        speedBoostAnimationTimer = Mathf.Clamp01(speedBoostAnimationTimer);
+
+        anim.SetLayerWeight(anim.GetLayerIndex("Arms Layer"), speedBoostAnimationTimer);
+        additionalRotation.x = 50f * speedBoostAnimationTimer;
+
 
         shield.SetActive(haveShield);
         speedEffect.gameObject.SetActive(isSpeedBoost);
