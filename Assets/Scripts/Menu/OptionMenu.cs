@@ -17,9 +17,6 @@ public class OptionMenu : MonoBehaviour
     [SerializeField] private Slider volumeSlider = null;
     [SerializeField] private Toggle vibrationToggle = null;
 
-    private Image touchImage = null;
-    private Image gyroImage = null;
-
     public static Settings settings = new Settings();
 
     void Start()
@@ -27,7 +24,6 @@ public class OptionMenu : MonoBehaviour
         settings.volume = PlayerPrefs.GetFloat("Volume");
         settings.gyroEnabled = System.Convert.ToBoolean(PlayerPrefs.GetInt("GyroEnabled"));
         settings.vibrationEnabled = System.Convert.ToBoolean(PlayerPrefs.GetInt("VibrationEnabled"));
-
 
         if (SystemInfo.supportsGyroscope == false)
         {
@@ -38,22 +34,17 @@ public class OptionMenu : MonoBehaviour
         {
             Input.gyro.enabled = settings.gyroEnabled;
         }
-
-        touchImage = touchButton.GetComponent<Image>();
-        gyroImage = gyroButton.GetComponent<Image>();
     }
 
     void Update()
     {
         if (Input.gyro.enabled)
         {
-            touchImage.color = Color.white;
-            gyroImage.color = Color.cyan;
+            gyroButton.Select();
         }
         else
         {
-            touchImage.color = Color.cyan;
-            gyroImage.color = Color.white;
+            touchButton.Select();
         }
 
         vibrationToggle.isOn = settings.vibrationEnabled;
@@ -71,7 +62,6 @@ public class OptionMenu : MonoBehaviour
     {
         Input.gyro.enabled = true;
     }
-
     public void ChangeVolume()
     {
         settings.volume = volumeSlider.value;
