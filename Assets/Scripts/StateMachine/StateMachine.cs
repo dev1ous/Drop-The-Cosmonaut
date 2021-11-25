@@ -8,13 +8,19 @@ public class StateMachine : MonoBehaviour
     public AsyncOperation asyncLoad;
     public UnityEvent triggerEnter;
     public UnityEvent triggerExit;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
     }
 
@@ -54,6 +60,9 @@ public class StateMachine : MonoBehaviour
                 
             if (triggerEnter != null)
                 triggerEnter.AddListener(EnableScene);
+
+            if (triggerExit != null && SceneManager.sceneCount > 1)
+                triggerExit.AddListener(UnloadPreviousScene);
 
             yield return null;
         }

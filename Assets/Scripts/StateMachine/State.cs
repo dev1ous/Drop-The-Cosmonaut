@@ -2,27 +2,23 @@ using UnityEngine;
 
 public class State : MonoBehaviour
 {
+    [SerializeField]
     StateMachine stateMachine;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (stateMachine.asyncLoad == null)
-            return;
 
-        //float progressValue = Mathf.Clamp01(stateMachine.asyncLoad.progress / 0.9f);
-        //percentLoaded.text = Mathf.Round(progressValue * 100) + "%";
-
-            stateMachine.triggerEnter.Invoke();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if(other)
         if (stateMachine.asyncLoad == null)
             return;
             if (stateMachine.asyncLoad.progress >= 0.9f)
@@ -31,6 +27,6 @@ public class State : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-            stateMachine.triggerExit.Invoke();
+        stateMachine.triggerExit.Invoke();
     }
 }

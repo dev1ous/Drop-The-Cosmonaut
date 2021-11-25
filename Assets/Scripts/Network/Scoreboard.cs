@@ -69,7 +69,7 @@ public class Scoreboard : Network
         else
         {
             GUI.Box(new Rect(Screen.width / 2 - 65, 5, 120, 25), currentScore.ToString());
-            if(GUI.Button(new Rect(5, 60, 100, 25), "ScoreBoard"))
+            if (GUI.Button(new Rect(5, 60, 100, 25), "ScoreBoard"))
             {
                 showScoreboard = !showScoreboard;
                 if (!isLoading)
@@ -90,7 +90,7 @@ public class Scoreboard : Network
         {
             GUILayout.BeginHorizontal();
             GUI.color = Color.green;
-            GUILayout.Label("Your Rank is " + (playerRank > 0 ? playerRank.ToString() : "not ranked"));
+            GUILayout.Label("Your Rank is " + playerRank.ToString());
             GUILayout.Label("Highest Score: " + highestScore.ToString());
             GUI.color = Color.white;
             GUILayout.EndHorizontal();
