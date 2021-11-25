@@ -127,8 +127,10 @@ public class Scoreboard : Network
 
         using (UnityWebRequest unityWeb = UnityWebRequest.Post(url + "submit_score.php", wWWForm))
         {
+            ForceAcceptAll cert = new ForceAcceptAll();
+            unityWeb.certificateHandler = cert;
             yield return unityWeb.SendWebRequest();
-
+            cert?.Dispose();
             if (unityWeb.result == UnityWebRequest.Result.ConnectionError)
             {
                 print(unityWeb.error);
@@ -160,7 +162,10 @@ public class Scoreboard : Network
 
         using (UnityWebRequest unityWeb = UnityWebRequest.Post(url + "scoreboard.php", wWWForm))
         {
+            ForceAcceptAll cert = new ForceAcceptAll();
+            unityWeb.certificateHandler = cert;
             yield return unityWeb.SendWebRequest();
+            cert?.Dispose();
             if (unityWeb.result == UnityWebRequest.Result.ConnectionError)
             {
                 print(unityWeb.error);
