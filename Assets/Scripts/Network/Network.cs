@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Network : MonoBehaviour
 {
-    public string Username = "";
+    public static string Username = "";
 
-    public string url = "localhost/Runner/";
+    public string url = "https://ga-students.fr/Greg/Runner/";
 
-    public bool isLogged = false;
-    public bool isRegistered = false;
-    public bool isLoading = false;
+    public static bool isLogged = false;
+    public static bool isRegistered = false;
+    public static bool isLoading = false;
 
     private void Start()
     {
