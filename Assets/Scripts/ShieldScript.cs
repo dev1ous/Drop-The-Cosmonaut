@@ -2,6 +2,7 @@ using UnityEngine;
 public class ShieldScript : MonoBehaviour
 {
     [HideInInspector] public GameManager gm;
+    [SerializeField] public AudioSource bonusSound;
 
     private void Update()
     {
@@ -15,6 +16,7 @@ public class ShieldScript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            bonusSound.Play();
             gm.player.haveShield = true;
         }
     }

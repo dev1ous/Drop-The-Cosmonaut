@@ -35,6 +35,8 @@ public class Character : MonoBehaviour
     [SerializeField] private ParticleSystem speedEffect = null;
     [SerializeField] private ParticleSystem shieldBreakEffect = null;
     [SerializeField] private Animator anim = null;
+    [SerializeField] private AudioSource speedBoostAudio = null;
+    [SerializeField] private AudioSource HurtSound = null;
     private Touch touchInput;
     private Vector2 touchScreenPosition;
     private Vector2 onPressScreenPosition;
@@ -140,6 +142,7 @@ public class Character : MonoBehaviour
         else
         {
             speedBoostAnimationTimer -= Time.deltaTime * 1.25f;
+            speedBoostAudio.Play();
 
         }
 
@@ -166,6 +169,7 @@ public class Character : MonoBehaviour
         if (haveShield)
         {
             haveShield = false;
+            HurtSound.Play();
             shieldBreakEffect.Play();
             currentFallingSpeed /= fallingDecrementMultiplier;
         }
