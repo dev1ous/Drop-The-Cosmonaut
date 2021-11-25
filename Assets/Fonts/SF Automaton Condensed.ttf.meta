@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 7f06ffee4eca4e746bd8ccecf9ecfee5
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - SF Automaton Condensed
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 3e5ab5274d7dcee4d8a24b3558733c33, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

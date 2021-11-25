@@ -23,7 +23,7 @@ public class PickableScript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            gm.nbFuel += pickupData.fuelGiven;
+            gm.player.AddFuel(pickupData.fuelGiven);
             Destroy(gameObject);
         }
     }
