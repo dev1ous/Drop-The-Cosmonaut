@@ -125,9 +125,7 @@ public class Login : Network
     void RegisterFunc(int idx)
     {
         if (isLoading)
-        {
             GUI.enabled = false;
-        }
 
         if (errorMessage != "")
         {
@@ -150,7 +148,7 @@ public class Login : Network
             StartCoroutine(RegisterNetwork());
         }
 
-        if(GUILayout.Button("Oups...what a\n terrible goldfish\n memory i have", GUILayout.Width(130), GUILayout.Height(50)))
+        if(GUILayout.Button("Return to login", GUILayout.Width(130), GUILayout.Height(50)))
         {
             ResetInfosData();
             selected = selectedOption.Login;
@@ -184,7 +182,6 @@ public class Login : Network
                 {
                     ResetInfosData();
                     isRegistered = true;
-                    selected = selectedOption.Login;
                 }
                 else
                 {
