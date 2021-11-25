@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class Character : MonoBehaviour
@@ -9,26 +10,41 @@ public class Character : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float defaultFallingSpeed = 10f;
     [SerializeField] private float fallingAccel = 0.05f;
-    [SerializeField] private float fallingDecrementMultiplier = 1.25f;
+    [SerializeField] private float fallingDecrementMultiplier = 1.2f;
     [SerializeField] private float maxfallingSpeed = 200f;
+    [SerializeField] private float maxFuel = 200f;
+    [SerializeField] private float speedBoost = 10f;
+    [SerializeField] private float fuelConsumtion = 10f;
     private float currentFallingSpeed;
+    private float currentFuel;
+    private bool isSpeedBoost = false;
+
     public bool haveShield = false;
     public float traveledDistance { get; private set; } = 0f;
     public int score { get; private set; } = 0;
+
+
 
     [Header("Misc")]
     [SerializeField] private Camera cam = null;
     [SerializeField] private BoxCollider ModelSize = null;
     [SerializeField] private DeathMenu deathMenu = null;
+    [SerializeField] private Text scoreText = null;
+    [SerializeField] private Image fuelFillBar = null;
     [SerializeField] private GameObject shield = null;
     [SerializeField] private ParticleSystem speedEffect = null;
     [SerializeField] private ParticleSystem shieldBreakEffect = null;
+    [SerializeField] private Animator anim = null;
     private Touch touchInput;
-    private bool isTouch = false;
     private Vector2 touchScreenPosition;
     private Vector2 onPressScreenPosition;
     private Vector3 gyroValue;
     private Vector3 directionVector;
+    private bool isTouch = false;
+    private Vector3 additionalRotation;
+    private float speedBoostAnimationTimer = 0f;
+
+
 
     private void OnEnable()
     {
@@ -63,7 +79,7 @@ public class Character : MonoBehaviour
         {
             Vector3 onPressPositionToWorld = cam.ScreenToWorldPoint(new Vector3(onPressScreenPosition.x, onPressScreenPosition.y, 8.5f));
             Vector3 touchPositionToWorld = cam.ScreenToWorldPoint(new Vector3(touchScreenPosition.x, touchScreenPosition.y, 8.5f));
-            directionVector += (touchPositionToWorld - onPressPositionToWorld) * 1.10f;
+            directionVector += (touchPositionToWorld - onPressPositionToWorld) * 1.15f;
 
             onPressScreenPosition = touchScreenPosition;
         }
@@ -78,6 +94,8 @@ public class Character : MonoBehaviour
             transform.localEulerAngles = new Vector3(Mathf.Sign(directionVector.z) * Mathf.Clamp(Mathf.Abs(directionVector.z) * 6f, 0.1f, 25), transform.localEulerAngles.y, transform.localEulerAngles.z);
         else
             transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
+
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z) + additionalRotation;
 
 
         // movement claming
@@ -104,10 +122,39 @@ public class Character : MonoBehaviour
         currentFallingSpeed += fallingAccel * Time.deltaTime;
 
         currentFallingSpeed = Mathf.Clamp(currentFallingSpeed, 0f, maxfallingSpeed);
+        scoreText.text = score.ToString();
+        fuelFillBar.fillAmount = currentFuel / maxFuel;
+
+        if (isSpeedBoost)
+        {
+            speedBoostAnimationTimer += Time.deltaTime * 1.25f;
+            currentFuel -= fuelConsumtion * Time.deltaTime;
+
+            if (currentFuel <= 0f)
+            {
+                currentFuel = 0f;
+                isSpeedBoost = false;
+                currentFallingSpeed -= speedBoost;
+            }
+        }
+        else
+        {
+            speedBoostAnimationTimer -= Time.deltaTime * 1.25f;
+
+        }
+
+        speedBoostAnimationTimer = Mathf.Clamp01(speedBoostAnimationTimer);
+
+        anim.SetLayerWeight(anim.GetLayerIndex("Arms Layer"), speedBoostAnimationTimer);
+        additionalRotation.x = 50f * speedBoostAnimationTimer;
+
+
         shield.SetActive(haveShield);
-        //speedEffect.gameObject.SetActive(speedboost variable);
+        speedEffect.gameObject.SetActive(isSpeedBoost);
         shield.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
     }
+
+
 
     public void TakeDamage()
     {
@@ -144,4 +191,19 @@ public class Character : MonoBehaviour
     {
         isTouch = false;
     }
+
+    public void AddFuel(float value)
+    {
+        if (isSpeedBoost == false)
+        {
+            currentFuel += value;
+            if (currentFuel >= maxFuel)
+            {
+                currentFuel = maxFuel;
+                isSpeedBoost = true;
+                currentFallingSpeed += speedBoost;
+            }
+        }
+    }
+
 }
