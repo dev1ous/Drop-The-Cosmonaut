@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class OptionMenu : MonoBehaviour
@@ -16,6 +17,7 @@ public class OptionMenu : MonoBehaviour
     [SerializeField] private Button gyroButton = null;
     [SerializeField] private Slider volumeSlider = null;
     [SerializeField] private Toggle vibrationToggle = null;
+    [SerializeField] private AudioMixer masterVolume = null;
 
     public static Settings settings = new Settings();
 
@@ -65,6 +67,7 @@ public class OptionMenu : MonoBehaviour
     public void ChangeVolume()
     {
         settings.volume = volumeSlider.value;
+        masterVolume.SetFloat("MasterVolume", Mathf.Log10(settings.volume) * 20);
     }
 
     public void ClickVibration()

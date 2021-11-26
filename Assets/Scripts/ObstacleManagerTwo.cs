@@ -15,6 +15,7 @@ public class ObstacleManagerTwo : MonoBehaviour
     [SerializeField] private float randomRadius = 1f;
     [SerializeField] private float spawnDelayMin = 0.1f;
     [SerializeField] private float spawnDelayMax = 0.2f;
+    [SerializeField] private GameManager gm = null;
     [SerializeField] private Pattern[] patterns;
 
     private Pattern currentExecutingPatten = null;
@@ -26,6 +27,9 @@ public class ObstacleManagerTwo : MonoBehaviour
     {
         currentExecutingPatten = patterns[Random.Range(0, patterns.Length)];
         spawnDelay = Random.Range(spawnDelayMin, spawnDelayMax);
+
+        foreach (ObstacleScript obs in obstacles)
+            obs.gm = gm;
     }
 
     private void Update()
