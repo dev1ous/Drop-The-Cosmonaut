@@ -87,17 +87,17 @@ public class Character : MonoBehaviour
         }
 
         // rotations
-        if (Mathf.Abs(directionVector.x) > 0)
-            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 15f, 0.1f, 30));
-        else
-            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
+        //if (Mathf.Abs(directionVector.x) > 0)
+        //    transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 15f, 0.1f, 30));
+        //else
+        //    transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
 
-        if (Mathf.Abs(directionVector.z) > 0)
-            transform.localEulerAngles = new Vector3(Mathf.Sign(directionVector.z) * Mathf.Clamp(Mathf.Abs(directionVector.z) * 6f, 0.1f, 25), transform.localEulerAngles.y, transform.localEulerAngles.z);
-        else
-            transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
+        //if (Mathf.Abs(directionVector.z) > 0)
+        //    transform.localEulerAngles = new Vector3(Mathf.Sign(directionVector.z) * Mathf.Clamp(Mathf.Abs(directionVector.z) * 6f, 0.1f, 25), transform.localEulerAngles.y, transform.localEulerAngles.z);
+        //else
+        //    transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
 
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z) + additionalRotation;
+        //transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z) + additionalRotation;
 
 
         // movement claming
@@ -148,13 +148,13 @@ public class Character : MonoBehaviour
 
         speedBoostAnimationTimer = Mathf.Clamp01(speedBoostAnimationTimer);
 
-        anim.SetLayerWeight(anim.GetLayerIndex("Arms Layer"), speedBoostAnimationTimer);
+        //anim.SetLayerWeight(anim.GetLayerIndex("Arms Layer"), speedBoostAnimationTimer);
         additionalRotation.x = 50f * speedBoostAnimationTimer;
 
 
         shield.SetActive(haveShield);
         speedEffect.gameObject.SetActive(isSpeedBoost);
-        shield.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
+        //shield.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
     }
 
 
