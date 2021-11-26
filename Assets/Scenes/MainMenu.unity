@@ -1258,11 +1258,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: b6a1cf4e3eeaf9a4ca38bf8acb910a6d, type: 3}
       propertyPath: m_Value
-      value: 42
+      value: 0.58
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: b6a1cf4e3eeaf9a4ca38bf8acb910a6d, type: 3}
       propertyPath: m_MaxValue
-      value: 100
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: b6a1cf4e3eeaf9a4ca38bf8acb910a6d, type: 3}
+      propertyPath: m_MinValue
+      value: 0.0001
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: b6a1cf4e3eeaf9a4ca38bf8acb910a6d, type: 3}
       propertyPath: m_Direction
@@ -1475,7 +1479,7 @@ AudioSource:
   m_GameObject: {fileID: 615458136}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 207ff46e35dff6b4f90e12e384bdb519, type: 2}
   m_audioClip: {fileID: 8300000, guid: 8f5ed09a68322b6489e00da42f078fbf, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -1571,7 +1575,7 @@ AudioSource:
   m_GameObject: {fileID: 615458136}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 207ff46e35dff6b4f90e12e384bdb519, type: 2}
   m_audioClip: {fileID: 8300000, guid: 3d3ed10b3c69e974f85263b3a59db02d, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.1
@@ -2824,6 +2828,7 @@ MonoBehaviour:
   gyroButton: {fileID: 1190101797}
   volumeSlider: {fileID: 539715720}
   vibrationToggle: {fileID: 1767113186}
+  masterVolume: {fileID: 24100000, guid: 207ff46e35dff6b4f90e12e384bdb519, type: 2}
 --- !u!1 &1219634358
 GameObject:
   m_ObjectHideFlags: 0
