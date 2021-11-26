@@ -257,12 +257,14 @@ public class Login : Network
         WWWForm wWWForm = new();
         wWWForm.AddField("username", loginUsername);
         wWWForm.AddField("password", loginPassword);
+        wWWForm.AddField("highscores", highestScore);
 
         using(UnityWebRequest unityWeb = UnityWebRequest.Post(url + "login.php", wWWForm))
         {
-            ForceAcceptAll cert = new ForceAcceptAll();
+            ForceAcceptAll cert = new();
             unityWeb.certificateHandler = cert;
             yield return unityWeb.SendWebRequest();
+
             cert?.Dispose();
             if(unityWeb.result != UnityWebRequest.Result.Success)
             {
@@ -271,10 +273,13 @@ public class Login : Network
             else
             {
                 string responseText = unityWeb.downloadHandler.text;
-                Debug.Log(responseText);
+
                 if(responseText.StartsWith("Success"))
                 {
+                    string[] arr = responseText.Split('|');
+                    highestScore = int.Parse(arr[1]);
                     isLogged = true;
+                    Username = loginUsername;
                     ResetInfosData();
                 }
                 else

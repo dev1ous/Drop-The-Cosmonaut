@@ -11,6 +11,7 @@ public class Network : MonoBehaviour
     public static bool isLogged = false;
     public static bool isRegistered = false;
     public static bool isLoading = false;
+    public static int highestScore = 0;
 
     private void Start()
     {
