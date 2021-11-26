@@ -10,9 +10,12 @@ public class Scoreboard : Network
     int previousScore = 0;
     float delayScoreSubmit;
     bool submitScore = false;
-    int highestScore = 0;
     int playerRank = -1;
     bool scorebordResult = false;
+    [SerializeField] DeathMenu deathMenu = null;
+    [SerializeField] private float multiplier = 1f;
+    [SerializeField] Texture windowTex;
+    [SerializeField] Character player;
 
     [System.Serializable]
     public class ScoreboardUser
@@ -25,14 +28,16 @@ public class Scoreboard : Network
     // Start is called before the first frame update
     private void Start()
     {
-        
     }
 
     // Update is called once per frame
     private void Update()
     {
+        deathMenu.gameObject.SetActive(true);
         if (isLogged)
         {
+            currentScore = player.score;
+
             if(currentScore != previousScore && !submitScore)
             {
                 if (delayScoreSubmit > 0)
@@ -59,11 +64,16 @@ public class Scoreboard : Network
     {
         if (showScoreboard && scorebordResult)
         {
-            GUI.Window(1, new Rect(Screen.width / 2 - 300, Screen.height / 2 - 225, 600, 460), ScoreBoardRendering, "ScoreBoard");
+            Rect rect = new(Screen.width / 2 - 450, Screen.height / 2 - 1000, (450 * multiplier), (800 * multiplier));
+            //windowTex.height = (int)rect.height;
+            //windowTex.width = (int)rect.width;
+            GUI.Window(1, rect, ScoreBoardRendering, new GUIContent("ScoreBoard"));
+            GUI.skin.window.fontSize = 20 * (int)multiplier;
+            GUI.skin.window.border.top = 20;
         }
         if (!isLogged)
         {
-            showScoreboard = false;
+            //showScoreboard = false;
             currentScore = 0;
         }
         else
@@ -88,10 +98,13 @@ public class Scoreboard : Network
         }
         else
         {
+            GUILayout.Space(50f);
             GUILayout.BeginHorizontal();
             GUI.color = Color.green;
-            GUILayout.Label("Your Rank is " + playerRank.ToString());
+            GUILayout.Label("Your Rank is ");
+            GUILayout.Space(100f);
             GUILayout.Label("Highest Score: " + highestScore.ToString());
+            GUI.skin.label.fontSize = 20 * (int)multiplier;
             GUI.color = Color.white;
             GUILayout.EndHorizontal();
 
@@ -107,7 +120,7 @@ public class Scoreboard : Network
                 }
                 GUILayout.Label((i + 1).ToString(), GUILayout.Width(30));
                 GUILayout.Label(scoreboardUsers[i].username, GUILayout.Width(230));
-
+                GUILayout.Space(170f);
                 GUILayout.Label(scoreboardUsers[i].score.ToString());
                 GUI.color = Color.white;
                 GUILayout.EndHorizontal();
@@ -159,6 +172,8 @@ public class Scoreboard : Network
 
         WWWForm wWWForm = new();
         wWWForm.AddField("username", Username);
+        //  wWWForm.AddField("username", "Martin");
+        Debug.Log("user " + Username);
 
         using (UnityWebRequest unityWeb = UnityWebRequest.Post(url + "scoreboard.php", wWWForm))
         {
@@ -177,12 +192,13 @@ public class Scoreboard : Network
                 if (responseText.StartsWith("Success"))
                 {
                     string[] dataChunks = responseText.Split("|");
+                    Debug.Log(responseText);
 
-                    if (dataChunks[0].Contains(","))
+                    if (dataChunks[1].Contains(","))
                     {
-                        string[] tmp = dataChunks[0].Split(',');
+                        string[] tmp = dataChunks[1].Split(',');
                         highestScore = int.Parse(tmp[1]);
-                        playerRank = int.Parse(tmp[2]);
+                        //playerRank = int.Parse(tmp[2]);
                     }
                     else
                     {

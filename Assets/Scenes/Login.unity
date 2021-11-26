@@ -3112,13 +3112,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1695319198}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e84c234068e679843b8d2b4a2fe5f780, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   url: https://ga-students.fr/Greg/Runner/
   showScoreboard: 0
+  deathMenu: {fileID: 0}
+  multiplier: 1
+  windowTex: {fileID: 0}
 --- !u!114 &1695319200 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 344162264035926562, guid: 8a47d92ed3f9e1549984cc193f9d58e4, type: 3}

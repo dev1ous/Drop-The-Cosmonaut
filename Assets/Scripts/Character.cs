@@ -28,7 +28,7 @@ public class Character : MonoBehaviour
     [Header("Misc")]
     [SerializeField] private Camera cam = null;
     [SerializeField] private BoxCollider ModelSize = null;
-    [SerializeField] private DeathMenu deathMenu = null;
+    [SerializeField] private Scoreboard scoreboard = null;
     [SerializeField] private Text scoreText = null;
     [SerializeField] private Image fuelFillBar = null;
     [SerializeField] private GameObject shield = null;
@@ -175,7 +175,7 @@ public class Character : MonoBehaviour
         }
         else
         {
-            deathMenu.gameObject.SetActive(true);
+            scoreboard.gameObject.SetActive(true);
             gameObject.SetActive(false);
         }
     }
