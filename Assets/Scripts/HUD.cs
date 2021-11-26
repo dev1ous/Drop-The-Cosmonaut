@@ -22,7 +22,7 @@ public class HUD : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player.score > 1000f) // player.score >= highScore
+        if (player.score > Network.highestScore)
         {
             scoreText.color = new Color(0.933f, 0.882f, 0.305f);
             scoreParticules.gameObject.SetActive(true);

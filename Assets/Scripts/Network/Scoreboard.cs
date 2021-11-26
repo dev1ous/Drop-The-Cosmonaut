@@ -9,6 +9,7 @@ public class Scoreboard : Network
     int currentScore = 0;
     int previousScore = 0;
     float delayScoreSubmit;
+    int bestScore = 0;
     bool submitScore = false;
     int playerRank = -1;
     bool scorebordResult = false;
@@ -51,20 +52,20 @@ public class Scoreboard : Network
         {
             delayScoreSubmit = 3;
         }
-        if (Input.GetKeyDown(KeyCode.T))
-            currentScore += 5;
+        //if (Input.GetKeyDown(KeyCode.T))
+        //    currentScore += 5;
 
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(SubmitScore(currentScore));
-        }
+        //if(Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    StartCoroutine(SubmitScore(currentScore));
+        //}
     }
 
     private void OnGUI()
     {
-        if (showScoreboard && scorebordResult)
+        if (scorebordResult)
         {
-            Rect rect = new(Screen.width / 2 - 450, Screen.height / 2 - 1000, (450 * multiplier), (800 * multiplier));
+            Rect rect = new(Screen.width / 2 - 450, Screen.height / 2 - 850, (450 * multiplier), (800 * multiplier));
             //windowTex.height = (int)rect.height;
             //windowTex.width = (int)rect.width;
             GUI.Window(1, rect, ScoreBoardRendering, new GUIContent("ScoreBoard"));
@@ -78,15 +79,19 @@ public class Scoreboard : Network
         }
         else
         {
-            GUI.Box(new Rect(Screen.width / 2 - 65, 5, 120, 25), currentScore.ToString());
-            if (GUI.Button(new Rect(5, 60, 100, 25), "ScoreBoard"))
+            if (scorebordResult == false)
             {
-                showScoreboard = !showScoreboard;
-                if (!isLoading)
-                {
-                    StartCoroutine(GetScoreBoard());
-                }
+                StartCoroutine(GetScoreBoard());
             }
+
+            //GUI.Box(new Rect(Screen.width / 2 - 65, 5, 120, 25), currentScore.ToString());
+            //if (GUI.Button(new Rect(5, 60, 100, 25), "ScoreBoard"))
+            //{
+            //    showScoreboard = !showScoreboard;
+            //    if (!isLoading)
+            //    {
+            //    }
+            //}
         }
     }
 
@@ -103,7 +108,7 @@ public class Scoreboard : Network
             GUI.color = Color.green;
             GUILayout.Label("Your Rank is ");
             GUILayout.Space(100f);
-            GUILayout.Label("Highest Score: " + highestScore.ToString());
+            GUILayout.Label("Your highest Score: " + highestScore.ToString());
             GUI.skin.label.fontSize = 20 * (int)multiplier;
             GUI.color = Color.white;
             GUILayout.EndHorizontal();
@@ -120,7 +125,7 @@ public class Scoreboard : Network
                 }
                 GUILayout.Label((i + 1).ToString(), GUILayout.Width(30));
                 GUILayout.Label(scoreboardUsers[i].username, GUILayout.Width(230));
-                GUILayout.Space(170f);
+                GUILayout.Space(130f);
                 GUILayout.Label(scoreboardUsers[i].score.ToString());
                 GUI.color = Color.white;
                 GUILayout.EndHorizontal();
@@ -133,6 +138,10 @@ public class Scoreboard : Network
     {
         submitScore = true;
 
+        if (score > highestScore)
+        {
+            highestScore = score;
+        }
 
         WWWForm wWWForm = new();
         wWWForm.AddField("username", Username);
@@ -197,12 +206,12 @@ public class Scoreboard : Network
                     if (dataChunks[1].Contains(","))
                     {
                         string[] tmp = dataChunks[1].Split(',');
-                        highestScore = int.Parse(tmp[1]);
+                        bestScore = int.Parse(tmp[1]);
                         //playerRank = int.Parse(tmp[2]);
                     }
                     else
                     {
-                        highestScore = 0;
+                        bestScore = 0;
                         playerRank = -1;
                     }
 
