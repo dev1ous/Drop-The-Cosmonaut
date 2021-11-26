@@ -5,9 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class DeathMenu : MonoBehaviour
 {
+    [SerializeField] private AudioSource deathSound;
+
     private void OnEnable()
     {
         Time.timeScale = 0f;
+        deathSound.Play();
     }
 
     private void OnDisable()

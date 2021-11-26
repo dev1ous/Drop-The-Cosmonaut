@@ -3,6 +3,7 @@ using UnityEngine;
 public class PickableScript : MonoBehaviour
 {
     [SerializeField] private PickupData pickupData;
+    [SerializeField] private AudioSource music;
 
     [HideInInspector] public Camera cam;
     [HideInInspector] public GameManager gm;
@@ -23,8 +24,8 @@ public class PickableScript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            music.Play();
             gm.player.AddFuel(pickupData.fuelGiven);
-            Destroy(gameObject);
         }
     }
 }

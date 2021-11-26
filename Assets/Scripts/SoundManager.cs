@@ -7,17 +7,22 @@ using System.Linq;
 
 public class SoundManager : MonoBehaviour
 {
+    [SerializeField] private AudioSource music;
     [SerializeField] private AudioSource buttonClick;
     private Button[] buttons;
 
     void Start()
     {
-        buttons = FindObjectsOfType<MonoBehaviour>().OfType<Button>().ToArray();
+        buttons = FindObjectsOfType<MonoBehaviour>(true).OfType<Button>().ToArray();
+
         foreach (Button btn in buttons)
         {
-            btn.onClick.AddListener(() => { 
+            btn.onClick.AddListener(() =>
+            {
                 buttonClick.Play();
             });
         }
+
+        music.Play();
     }
 }
