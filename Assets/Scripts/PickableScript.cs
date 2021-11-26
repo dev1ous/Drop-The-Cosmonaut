@@ -14,7 +14,7 @@ public class PickableScript : MonoBehaviour
 
     private void Update()
     {
-        transform.Rotate(new Vector3(1, 1, 1));
+        transform.Rotate(new Vector3(.5f, .5f, .5f));
 
         if (gameObject.transform.position.y > gm.player.transform.position.y + 10f)
             Destroy(gameObject);
