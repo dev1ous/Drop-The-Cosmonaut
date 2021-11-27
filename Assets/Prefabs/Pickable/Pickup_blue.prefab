@@ -285,6 +285,10 @@ PrefabInstance:
       value: Barrel_LOD0
       objectReference: {fileID: 0}
     - target: {fileID: 1083331734955594262, guid: 3550042b436f4b94ebcccb00e976b3e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1083331734955594262, guid: 3550042b436f4b94ebcccb00e976b3e7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: d31fa5d91bfa4bd4a8d9a001c377fd17, type: 2}

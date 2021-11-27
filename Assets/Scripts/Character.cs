@@ -27,7 +27,7 @@ public class Character : MonoBehaviour
 
     [Header("Misc")]
     [SerializeField] private Camera cam = null;
-    [SerializeField] private BoxCollider ModelSize = null;
+    [SerializeField] private float playerRadius = 0.4f;
     [SerializeField] private Scoreboard scoreboard = null;
     [SerializeField] private Text scoreText = null;
     [SerializeField] private Image fuelFillBar = null;
@@ -87,28 +87,28 @@ public class Character : MonoBehaviour
         }
 
         // rotations
-        if (Mathf.Abs(directionVector.x) > 0)
-            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 15f, 0.1f, 30));
-        else
-            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
+        //if (Mathf.Abs(directionVector.x) > 0)
+        //    transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 15f, 0.1f, 30));
+        //else
+        //    transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
 
-        if (Mathf.Abs(directionVector.z) > 0)
-            transform.localEulerAngles = new Vector3(Mathf.Sign(directionVector.z) * Mathf.Clamp(Mathf.Abs(directionVector.z) * 6f, 0.1f, 25), transform.localEulerAngles.y, transform.localEulerAngles.z);
-        else
-            transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
+        //if (Mathf.Abs(directionVector.z) > 0)
+        //    transform.localEulerAngles = new Vector3(Mathf.Sign(directionVector.z) * Mathf.Clamp(Mathf.Abs(directionVector.z) * 6f, 0.1f, 25), transform.localEulerAngles.y, transform.localEulerAngles.z);
+        //else
+        //    transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
 
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z) + additionalRotation;
+        //transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z) + additionalRotation;
 
 
         // movement claming
-        if ((cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x > 1f && directionVector.x > 0) ||
-            (cam.WorldToViewportPoint(transform.position + Vector3.right * (ModelSize.center.x + -ModelSize.bounds.extents.x + (directionVector.x * moveSpeed * Time.deltaTime))).x < 0f && directionVector.x < 0))
+        if ((cam.WorldToViewportPoint(transform.position + Vector3.right * playerRadius + (Vector3.right *  directionVector.x * moveSpeed * Time.deltaTime)).x > 1f && directionVector.x > 0) ||
+            (cam.WorldToViewportPoint(transform.position + Vector3.left * playerRadius + (Vector3.left * directionVector.x * moveSpeed * Time.deltaTime)).x < 0f && directionVector.x < 0))
         {
             directionVector.x = 0;
         }
 
-        if ((cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y > 1f && directionVector.z > 0) ||
-            (cam.WorldToViewportPoint(transform.position + Vector3.forward * (ModelSize.center.z + -ModelSize.bounds.extents.z + (directionVector.z * moveSpeed * Time.deltaTime))).y < 0f && directionVector.z < 0))
+        if ((cam.WorldToViewportPoint(transform.position + Vector3.forward * playerRadius + (Vector3.forward * directionVector.z * moveSpeed * Time.deltaTime)).y > 1f && directionVector.z > 0) ||
+            (cam.WorldToViewportPoint(transform.position + Vector3.back * playerRadius + (Vector3.back * directionVector.z * moveSpeed * Time.deltaTime)).y < 0f && directionVector.z < 0))
         {
             directionVector.z = 0;
         }
@@ -148,13 +148,13 @@ public class Character : MonoBehaviour
 
         speedBoostAnimationTimer = Mathf.Clamp01(speedBoostAnimationTimer);
 
-        anim.SetLayerWeight(anim.GetLayerIndex("Arms Layer"), speedBoostAnimationTimer);
+        //anim.SetLayerWeight(anim.GetLayerIndex("Arms Layer"), speedBoostAnimationTimer);
         additionalRotation.x = 50f * speedBoostAnimationTimer;
 
 
         shield.SetActive(haveShield);
         speedEffect.gameObject.SetActive(isSpeedBoost);
-        shield.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
+        //shield.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
     }
 
 

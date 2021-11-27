@@ -31,6 +31,8 @@ public class Login : Network
 
     //[SerializeField] private float scale = 1f;
 
+    private bool isRemember = false;
+
     [SerializeField] private GameObject loginPanel = null;
     [SerializeField] private GameObject registerPanel = null;
 
@@ -41,6 +43,8 @@ public class Login : Network
     [SerializeField] private InputField registerPasswordField = null;
     [SerializeField] private InputField registerPasswordConfirmField = null;
 
+    [SerializeField] private Toggle rememberMeToggle = null;
+
     [SerializeField] private Text statutText = null;
     [SerializeField] private Text errorText = null;
 
@@ -49,6 +53,23 @@ public class Login : Network
     // Start is called before the first frame update
     void Start()
     {
+        if (isLoginOut == false)
+        {
+            isLoginOut = true;
+
+            isRemember = System.Convert.ToBoolean(PlayerPrefs.GetInt("isRemember"));
+            rememberMeToggle.isOn = isRemember;
+
+            if (isRemember)
+            {
+                loginUsername = PlayerPrefs.GetString("Username");
+                loginPassword = PlayerPrefs.GetString("Password");
+
+                loginUsernameField.text = loginUsername;
+                loginPasswordField.text = loginPassword;
+            }
+        }
+
         StartCoroutine(ConnectToDb());
     }
 
@@ -90,6 +111,11 @@ public class Login : Network
             if (unityWebRequest.result == UnityWebRequest.Result.Success)
             {
                 Debug.Log("CONNECTED");
+
+                if (isRemember && loginUsername != "" && loginPassword != "")
+                {
+                    ClickSubmit();
+                }
             }
             else
             {
@@ -259,14 +285,14 @@ public class Login : Network
         wWWForm.AddField("password", loginPassword);
         wWWForm.AddField("highscores", highestScore);
 
-        using(UnityWebRequest unityWeb = UnityWebRequest.Post(url + "login.php", wWWForm))
+        using (UnityWebRequest unityWeb = UnityWebRequest.Post(url + "login.php", wWWForm))
         {
             ForceAcceptAll cert = new();
             unityWeb.certificateHandler = cert;
             yield return unityWeb.SendWebRequest();
 
             cert?.Dispose();
-            if(unityWeb.result != UnityWebRequest.Result.Success)
+            if (unityWeb.result != UnityWebRequest.Result.Success)
             {
                 errorMessage = unityWeb.error;
             }
@@ -274,12 +300,13 @@ public class Login : Network
             {
                 string responseText = unityWeb.downloadHandler.text;
 
-                if(responseText.StartsWith("Success"))
+                if (responseText.StartsWith("Success"))
                 {
                     string[] arr = responseText.Split('|');
                     highestScore = int.Parse(arr[1]);
                     isLogged = true;
                     Username = loginUsername;
+                    SaveInfos();
                     ResetInfosData();
                 }
                 else
@@ -302,6 +329,21 @@ public class Login : Network
         isRegistered = false;
     }
 
+    private void SaveInfos()
+    {
+        if (isRemember)
+        {
+            PlayerPrefs.SetInt("isRemember", 1);
+            PlayerPrefs.SetString("Username", loginUsername);
+            PlayerPrefs.SetString("Password", loginPassword);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("isRemember", 0);
+            PlayerPrefs.SetString("Username", "");
+            PlayerPrefs.SetString("Password", "");
+        }
+    }
 
     public void ClickSubmit()
     {
@@ -354,5 +396,10 @@ public class Login : Network
         selected = selectedOption.Login;
         loginPanel.SetActive(true);
         registerPanel.SetActive(false);
+    }
+
+    public void ClickRemember()
+    {
+        isRemember = rememberMeToggle.isOn;
     }
 }

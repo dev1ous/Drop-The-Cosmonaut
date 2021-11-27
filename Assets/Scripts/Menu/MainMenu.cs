@@ -12,6 +12,7 @@ public class MainMenu : MonoBehaviour
 
     public void ClickLogOff()
     {
+        Network.isLoginOut = true;
         Network.Username = "";
         Network.isLogged = false;
         Network.isLoading = false;
