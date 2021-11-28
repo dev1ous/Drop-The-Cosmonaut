@@ -47,6 +47,7 @@ public class Login : Network
 
     [SerializeField] private Text statutText = null;
     [SerializeField] private Text errorText = null;
+    [SerializeField] private Text LoginDBText = null;
 
     private float registerTimer = 0f;
 
@@ -96,6 +97,25 @@ public class Login : Network
                 errorText.color = Color.red;
             }
         }
+
+        if (isLoading)
+        {
+            loginUsernameField.interactable = false;
+            loginPasswordField.interactable = false;
+            registerUsernameField.interactable = false;
+            registerPasswordField.interactable = false;
+            registerPasswordConfirmField.interactable = false;
+            rememberMeToggle.interactable = false;
+        }
+        else
+        {
+            loginUsernameField.interactable = true;
+            loginPasswordField.interactable = true;
+            registerUsernameField.interactable = true;
+            registerPasswordField.interactable = true;
+            registerPasswordConfirmField.interactable = true;
+            rememberMeToggle.interactable = true;
+        }
     }
 
     IEnumerator ConnectToDb()
@@ -110,12 +130,13 @@ public class Login : Network
 
             if (unityWebRequest.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log("CONNECTED");
-
                 if (isRemember && loginUsername != "" && loginPassword != "")
                 {
                     ClickSubmit();
                 }
+
+                LoginDBText.gameObject.SetActive(false);
+                loginPanel.SetActive(true);
             }
             else
             {
@@ -347,15 +368,21 @@ public class Login : Network
 
     public void ClickSubmit()
     {
-        StartCoroutine(LoginNetwork());
+        if (isLoading == false)
+        {
+            StartCoroutine(LoginNetwork());
+        }
     }
 
     public void ClickRegister()
     {
-        ResetInfosData();
-        selected = selectedOption.Register;
-        loginPanel.SetActive(false);
-        registerPanel.SetActive(true);
+        if (isLoading == false)
+        {
+            ResetInfosData();
+            selected = selectedOption.Register;
+            loginPanel.SetActive(false);
+            registerPanel.SetActive(true);
+        }
     }
 
     public void ChangeUsername()
@@ -387,15 +414,21 @@ public class Login : Network
 
     public void ClickRegisterSubmit()
     {
-        StartCoroutine(RegisterNetwork());
+        if (isLoading == false)
+        {
+            StartCoroutine(RegisterNetwork());
+        }
     }
 
     public void ClickRegisterLogin()
     {
-        ResetInfosData();
-        selected = selectedOption.Login;
-        loginPanel.SetActive(true);
-        registerPanel.SetActive(false);
+        if (isLoading == false)
+        {
+            ResetInfosData();
+            selected = selectedOption.Login;
+            loginPanel.SetActive(true);
+            registerPanel.SetActive(false);
+        }
     }
 
     public void ClickRemember()

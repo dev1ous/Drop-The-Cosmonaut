@@ -27,6 +27,8 @@ public class OptionMenu : MonoBehaviour
         settings.gyroEnabled = System.Convert.ToBoolean(PlayerPrefs.GetInt("GyroEnabled"));
         settings.vibrationEnabled = System.Convert.ToBoolean(PlayerPrefs.GetInt("VibrationEnabled"));
 
+        masterVolume.SetFloat("MasterVolume", Mathf.Log10(settings.volume) * 20f);
+
         if (SystemInfo.supportsGyroscope == false)
         {
             gyroButton.interactable = false;
@@ -64,10 +66,11 @@ public class OptionMenu : MonoBehaviour
     {
         Input.gyro.enabled = true;
     }
+
     public void ChangeVolume()
     {
         settings.volume = volumeSlider.value;
-        masterVolume.SetFloat("MasterVolume", Mathf.Log10(settings.volume) * 20);
+        masterVolume.SetFloat("MasterVolume", Mathf.Log10(settings.volume) * 20f);
     }
 
     public void ClickVibration()
