@@ -1,6 +1,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Scoreboard : Network
 {
@@ -15,8 +16,11 @@ public class Scoreboard : Network
     bool scorebordResult = false;
     [SerializeField] DeathMenu deathMenu = null;
     [SerializeField] private float multiplier = 1f;
-    [SerializeField] Texture windowTex;
     [SerializeField] Character player;
+    [SerializeField] private GameObject panelScoreboard = null;
+    [SerializeField] private Text Highscores = null;
+    [SerializeField] private PanelScoreboard panelScoreboardPrefab = null;
+    [SerializeField] private Transform basePosition = null;
 
     [System.Serializable]
     public class ScoreboardUser
@@ -59,80 +63,92 @@ public class Scoreboard : Network
         //{
         //    StartCoroutine(SubmitScore(currentScore));
         //}
-    }
 
-    private void OnGUI()
-    {
         if (scorebordResult)
         {
-            Rect rect = new(Screen.width / 2 - 450, Screen.height / 2 - 850, (450 * multiplier), (800 * multiplier));
-            //windowTex.height = (int)rect.height;
-            //windowTex.width = (int)rect.width;
-            GUI.Window(1, rect, ScoreBoardRendering, new GUIContent("ScoreBoard"));
-            GUI.skin.window.fontSize = 20 * (int)multiplier;
-            GUI.skin.window.border.top = 20;
+            panelScoreboard.SetActive(true);
         }
         if (!isLogged)
-        {
-            //showScoreboard = false;
             currentScore = 0;
-        }
         else
         {
-            if (scorebordResult == false)
-            {
+            if (!scorebordResult)
                 StartCoroutine(GetScoreBoard());
-            }
-
-            //GUI.Box(new Rect(Screen.width / 2 - 65, 5, 120, 25), currentScore.ToString());
-            //if (GUI.Button(new Rect(5, 60, 100, 25), "ScoreBoard"))
-            //{
-            //    showScoreboard = !showScoreboard;
-            //    if (!isLoading)
-            //    {
-            //    }
-            //}
         }
     }
 
-    private void ScoreBoardRendering(int idx)
-    {
-        if (isLoading)
-        {
-            GUILayout.Label("Loading...");
-        }
-        else
-        {
-            GUILayout.Space(50f);
-            GUILayout.BeginHorizontal();
-            GUI.color = Color.green;
-            GUILayout.Label("Your Rank is ");
-            GUILayout.Space(100f);
-            GUILayout.Label("Your highest Score: " + highestScore.ToString());
-            GUI.skin.label.fontSize = 20 * (int)multiplier;
-            GUI.color = Color.white;
-            GUILayout.EndHorizontal();
+    //private void OnGUI()
+    //{
+    //    if (scorebordResult)
+    //    {
+    //        Rect rect = new(Screen.width / 2 - 450, Screen.height / 2 - 850, (450 * multiplier), (800 * multiplier));
+    //        //windowTex.height = (int)rect.height;
+    //        //windowTex.width = (int)rect.width;
+    //        GUI.Window(1, rect, ScoreBoardRendering, new GUIContent("ScoreBoard"));
+    //        GUI.skin.window.fontSize = 20 * (int)multiplier;
+    //        GUI.skin.window.border.top = 20;
+    //    }
+    //    if (!isLogged)
+    //    {
+    //        //showScoreboard = false;
+    //        currentScore = 0;
+    //    }
+    //    else
+    //    {
+    //        if (scorebordResult == false)
+    //        {
+    //            StartCoroutine(GetScoreBoard());
+    //        }
 
-            scroll = GUILayout.BeginScrollView(scroll, false, true);
+    //        //GUI.Box(new Rect(Screen.width / 2 - 65, 5, 120, 25), currentScore.ToString());
+    //        //if (GUI.Button(new Rect(5, 60, 100, 25), "ScoreBoard"))
+    //        //{
+    //        //    showScoreboard = !showScoreboard;
+    //        //    if (!isLoading)
+    //        //    {
+    //        //    }
+    //        //}
+    //    }
+    //}
 
-            for(var i = 0; i < scoreboardUsers.Length; i++)
-            {
-                GUILayout.BeginHorizontal("box");
+    //private void ScoreBoardRendering(int idx)
+    //{
+    //    if (isLoading)
+    //    {
+    //        GUILayout.Label("Loading...");
+    //    }
+    //    else
+    //    {
+    //        GUILayout.Space(50f);
+    //        GUILayout.BeginHorizontal();
+    //        GUI.color = Color.green;
+    //        GUILayout.Label("Your Rank is ");
+    //        GUILayout.Space(100f);
+    //        GUILayout.Label("Your highest Score: " + highestScore.ToString());
+    //        GUI.skin.label.fontSize = 20 * (int)multiplier;
+    //        GUI.color = Color.white;
+    //        GUILayout.EndHorizontal();
 
-                if (scoreboardUsers[i].username == Username)
-                {
-                    GUI.color = Color.green;
-                }
-                GUILayout.Label((i + 1).ToString(), GUILayout.Width(30));
-                GUILayout.Label(scoreboardUsers[i].username, GUILayout.Width(230));
-                GUILayout.Space(130f);
-                GUILayout.Label(scoreboardUsers[i].score.ToString());
-                GUI.color = Color.white;
-                GUILayout.EndHorizontal();
-            }
-            GUILayout.EndScrollView();
-        }
-    }
+    //        scroll = GUILayout.BeginScrollView(scroll, false, true);
+
+    //        for(var i = 0; i < scoreboardUsers.Length; i++)
+    //        {
+    //            GUILayout.BeginHorizontal("box");
+
+    //            if (scoreboardUsers[i].username == Username)
+    //            {
+    //                GUI.color = Color.green;
+    //            }
+    //            GUILayout.Label((i + 1).ToString(), GUILayout.Width(30));
+    //            GUILayout.Label(scoreboardUsers[i].username, GUILayout.Width(230));
+    //            GUILayout.Space(130f);
+    //            GUILayout.Label(scoreboardUsers[i].score.ToString());
+    //            GUI.color = Color.white;
+    //            GUILayout.EndHorizontal();
+    //        }
+    //        GUILayout.EndScrollView();
+    //    }
+    //}
 
     private IEnumerator SubmitScore(int score)
     {
@@ -186,7 +202,7 @@ public class Scoreboard : Network
 
         using (UnityWebRequest unityWeb = UnityWebRequest.Post(url + "scoreboard.php", wWWForm))
         {
-            ForceAcceptAll cert = new ForceAcceptAll();
+            ForceAcceptAll cert = new();
             unityWeb.certificateHandler = cert;
             yield return unityWeb.SendWebRequest();
             cert?.Dispose();
@@ -225,6 +241,25 @@ public class Scoreboard : Network
                         scoreboardUsers[i - 1] = user;
                     }
                     scorebordResult = true;
+
+                    for (var i = 0; i < scoreboardUsers.Length; i++)
+                    {
+                        PanelScoreboard tmp = Instantiate(panelScoreboardPrefab, panelScoreboard.transform);
+
+                        if (scoreboardUsers[i].username == Username)
+                        {
+                            tmp.userRank.color = Color.green;
+                            tmp.userName.color = Color.green;
+                            tmp.userScore.color = Color.green;
+                        }
+
+                        tmp.userRank.text = (i + 1).ToString();
+                        tmp.userName.text = scoreboardUsers[i].username;
+                        tmp.userScore.text = scoreboardUsers[i].score.ToString();
+
+                        tmp.transform.localPosition = new Vector3(0f, -130 * i + basePosition.localPosition.y, 0f);
+                    }
+
                 }
                 else
                 {

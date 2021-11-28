@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,13 +12,13 @@ public class ForceAcceptAll : CertificateHandler
 }
 public class Login : Network
 {
-    public enum selectedOption
+    public enum SelectedOption
     {
         Login,
         Register
     }
 
-    public selectedOption selected = selectedOption.Login;
+    public SelectedOption selected = SelectedOption.Login;
 
     string loginUsername = "";
     string loginPassword = "";
@@ -102,9 +101,10 @@ public class Login : Network
     {
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(url + "database.php", ""))
         {
-            ForceAcceptAll cert = new ForceAcceptAll();
+            ForceAcceptAll cert = new();
             unityWebRequest.certificateHandler = cert;
             Debug.Log(url + "database.php");
+
             yield return unityWebRequest.SendWebRequest();
             cert?.Dispose();
 
@@ -245,8 +245,9 @@ public class Login : Network
 
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(url + "register.php", wWWForm))
         {
-            ForceAcceptAll cert = new ForceAcceptAll();
+            ForceAcceptAll cert = new();
             unityWebRequest.certificateHandler = cert;
+
             yield return unityWebRequest.SendWebRequest();
             cert?.Dispose();
 
@@ -289,8 +290,8 @@ public class Login : Network
         {
             ForceAcceptAll cert = new();
             unityWeb.certificateHandler = cert;
-            yield return unityWeb.SendWebRequest();
 
+            yield return unityWeb.SendWebRequest();
             cert?.Dispose();
             if (unityWeb.result != UnityWebRequest.Result.Success)
             {
@@ -353,7 +354,7 @@ public class Login : Network
     public void ClickRegister()
     {
         ResetInfosData();
-        selected = selectedOption.Register;
+        selected = SelectedOption.Register;
         loginPanel.SetActive(false);
         registerPanel.SetActive(true);
     }
@@ -393,7 +394,7 @@ public class Login : Network
     public void ClickRegisterLogin()
     {
         ResetInfosData();
-        selected = selectedOption.Login;
+        selected = SelectedOption.Login;
         loginPanel.SetActive(true);
         registerPanel.SetActive(false);
     }
