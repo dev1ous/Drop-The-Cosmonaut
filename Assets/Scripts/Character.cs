@@ -34,7 +34,6 @@ public class Character : MonoBehaviour
     [SerializeField] private GameObject shield = null;
     [SerializeField] private ParticleSystem speedEffect = null;
     [SerializeField] private ParticleSystem shieldBreakEffect = null;
-    [SerializeField] private Animator anim = null;
     [SerializeField] private AudioSource speedBoostAudio = null;
     [SerializeField] private AudioSource HurtSound = null;
     private Touch touchInput;
@@ -43,7 +42,6 @@ public class Character : MonoBehaviour
     private Vector3 gyroValue;
     private Vector3 directionVector;
     private bool isTouch = false;
-    private Vector3 additionalRotation;
     private float speedBoostAnimationTimer = 0f;
 
 
@@ -87,21 +85,10 @@ public class Character : MonoBehaviour
         }
 
         // rotations
-        //if (Mathf.Abs(directionVector.x) > 0)
-        //    transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, Mathf.Sign(-directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 15f, 0.1f, 30));
-        //else
-        //    transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0f);
-
-        //if (Mathf.Abs(directionVector.z) > 0)
-        //    transform.localEulerAngles = new Vector3(Mathf.Sign(directionVector.z) * Mathf.Clamp(Mathf.Abs(directionVector.z) * 6f, 0.1f, 25), transform.localEulerAngles.y, transform.localEulerAngles.z);
-        //else
-        //    transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
-
-        //transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z) + additionalRotation;
-
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Mathf.Sign(directionVector.x) * Mathf.Clamp(Mathf.Abs(directionVector.x) * 15f, 0f, 40), transform.localEulerAngles.z);
 
         // movement claming
-        if ((cam.WorldToViewportPoint(transform.position + Vector3.right * playerRadius + (Vector3.right *  directionVector.x * moveSpeed * Time.deltaTime)).x > 1f && directionVector.x > 0) ||
+        if ((cam.WorldToViewportPoint(transform.position + Vector3.right * playerRadius + (Vector3.right * directionVector.x * moveSpeed * Time.deltaTime)).x > 1f && directionVector.x > 0) ||
             (cam.WorldToViewportPoint(transform.position + Vector3.left * playerRadius + (Vector3.left * directionVector.x * moveSpeed * Time.deltaTime)).x < 0f && directionVector.x < 0))
         {
             directionVector.x = 0;
@@ -149,7 +136,6 @@ public class Character : MonoBehaviour
         speedBoostAnimationTimer = Mathf.Clamp01(speedBoostAnimationTimer);
 
         //anim.SetLayerWeight(anim.GetLayerIndex("Arms Layer"), speedBoostAnimationTimer);
-        additionalRotation.x = 50f * speedBoostAnimationTimer;
 
 
         shield.SetActive(haveShield);
