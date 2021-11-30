@@ -6,7 +6,7 @@ public class PickableManager : MonoBehaviour
 {
     [SerializeField] private Camera cam;
     [SerializeField] private GameManager gm = null;
-    [SerializeField] private PickableScript[] pickables;
+    [SerializeField] private PickableScript pickables;
     [SerializeField] private float offset = 10f;
 
     private float spawnDelay = 0f;
@@ -17,11 +17,8 @@ public class PickableManager : MonoBehaviour
 
     private void Start()
     {
-        foreach (PickableScript pick in pickables)
-        {
-            pick.gm = this.gm;
-            pick.cam = this.cam;
-        }
+        pickables.gm = this.gm;
+        pickables.cam = this.cam;
     }
 
     private void Update()
@@ -46,8 +43,7 @@ public class PickableManager : MonoBehaviour
 
     void SpawnPickable()
     {
-        GameObject obstacleGO = pickables[Random.Range(0, pickables.Length)].gameObject;
-
+        GameObject obstacleGO = pickables.gameObject;
         Instantiate(obstacleGO, transform.position, transform.rotation);
     }
 }

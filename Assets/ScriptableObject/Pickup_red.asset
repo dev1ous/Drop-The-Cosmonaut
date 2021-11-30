@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abb33c122b06e394e980dc37f0969fc2, type: 3}
   m_Name: Pickup_red
   m_EditorClassIdentifier: 
-  fuelGiven: 5
+  fuelGiven: 10
