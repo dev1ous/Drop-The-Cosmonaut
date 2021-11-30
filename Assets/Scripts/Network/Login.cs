@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,13 +13,13 @@ public class ForceAcceptAll : CertificateHandler
 }
 public class Login : Network
 {
-    public enum SelectedOption
+    public enum selectedOption
     {
         Login,
         Register
     }
 
-    public SelectedOption selected = SelectedOption.Login;
+    public selectedOption selected = selectedOption.Login;
 
     string loginUsername = "";
     string loginPassword = "";
@@ -46,6 +47,7 @@ public class Login : Network
 
     [SerializeField] private Text statutText = null;
     [SerializeField] private Text errorText = null;
+    [SerializeField] private Text LoginDBText = null;
 
     private float registerTimer = 0f;
 
@@ -95,27 +97,46 @@ public class Login : Network
                 errorText.color = Color.red;
             }
         }
+
+        if (isLoading)
+        {
+            loginUsernameField.interactable = false;
+            loginPasswordField.interactable = false;
+            registerUsernameField.interactable = false;
+            registerPasswordField.interactable = false;
+            registerPasswordConfirmField.interactable = false;
+            rememberMeToggle.interactable = false;
+        }
+        else
+        {
+            loginUsernameField.interactable = true;
+            loginPasswordField.interactable = true;
+            registerUsernameField.interactable = true;
+            registerPasswordField.interactable = true;
+            registerPasswordConfirmField.interactable = true;
+            rememberMeToggle.interactable = true;
+        }
     }
 
     IEnumerator ConnectToDb()
     {
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(url + "database.php", ""))
         {
-            ForceAcceptAll cert = new();
+            ForceAcceptAll cert = new ForceAcceptAll();
             unityWebRequest.certificateHandler = cert;
             Debug.Log(url + "database.php");
-
             yield return unityWebRequest.SendWebRequest();
             cert?.Dispose();
 
             if (unityWebRequest.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log("CONNECTED");
-
                 if (isRemember && loginUsername != "" && loginPassword != "")
                 {
                     ClickSubmit();
                 }
+
+                LoginDBText.gameObject.SetActive(false);
+                loginPanel.SetActive(true);
             }
             else
             {
@@ -245,9 +266,8 @@ public class Login : Network
 
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(url + "register.php", wWWForm))
         {
-            ForceAcceptAll cert = new();
+            ForceAcceptAll cert = new ForceAcceptAll();
             unityWebRequest.certificateHandler = cert;
-
             yield return unityWebRequest.SendWebRequest();
             cert?.Dispose();
 
@@ -290,8 +310,8 @@ public class Login : Network
         {
             ForceAcceptAll cert = new();
             unityWeb.certificateHandler = cert;
-
             yield return unityWeb.SendWebRequest();
+
             cert?.Dispose();
             if (unityWeb.result != UnityWebRequest.Result.Success)
             {
@@ -348,15 +368,21 @@ public class Login : Network
 
     public void ClickSubmit()
     {
-        StartCoroutine(LoginNetwork());
+        if (isLoading == false)
+        {
+            StartCoroutine(LoginNetwork());
+        }
     }
 
     public void ClickRegister()
     {
-        ResetInfosData();
-        selected = SelectedOption.Register;
-        loginPanel.SetActive(false);
-        registerPanel.SetActive(true);
+        if (isLoading == false)
+        {
+            ResetInfosData();
+            selected = selectedOption.Register;
+            loginPanel.SetActive(false);
+            registerPanel.SetActive(true);
+        }
     }
 
     public void ChangeUsername()
@@ -388,15 +414,21 @@ public class Login : Network
 
     public void ClickRegisterSubmit()
     {
-        StartCoroutine(RegisterNetwork());
+        if (isLoading == false)
+        {
+            StartCoroutine(RegisterNetwork());
+        }
     }
 
     public void ClickRegisterLogin()
     {
-        ResetInfosData();
-        selected = SelectedOption.Login;
-        loginPanel.SetActive(true);
-        registerPanel.SetActive(false);
+        if (isLoading == false)
+        {
+            ResetInfosData();
+            selected = selectedOption.Login;
+            loginPanel.SetActive(true);
+            registerPanel.SetActive(false);
+        }
     }
 
     public void ClickRemember()
