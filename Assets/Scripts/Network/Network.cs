@@ -13,14 +13,4 @@ public class Network : MonoBehaviour
     public static bool isLoading = false;
     public static int highestScore = 0;
     public static bool isLoginOut = false;
-
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-        
-    }
 }
