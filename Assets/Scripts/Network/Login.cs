@@ -48,6 +48,7 @@ public class Login : Network
     [SerializeField] private Text statutText = null;
     [SerializeField] private Text errorText = null;
     [SerializeField] private Text LoginDBText = null;
+    [SerializeField] private GameObject connectingPanel = null;
 
     private float registerTimer = 0f;
 
@@ -124,7 +125,8 @@ public class Login : Network
         {
             ForceAcceptAll cert = new ForceAcceptAll();
             unityWebRequest.certificateHandler = cert;
-            Debug.Log(url + "database.php");
+            //Debug.Log(url + "database.php");
+            unityWebRequest.timeout = 5;
             yield return unityWebRequest.SendWebRequest();
             cert?.Dispose();
 
@@ -135,12 +137,13 @@ public class Login : Network
                     ClickSubmit();
                 }
 
-                LoginDBText.gameObject.SetActive(false);
+                connectingPanel.gameObject.SetActive(false);
                 loginPanel.SetActive(true);
             }
             else
             {
-                Debug.LogError(unityWebRequest.error);
+                LoginDBText.text = unityWebRequest.error;
+                LoginDBText.color = Color.red;
             }
 
         }
@@ -435,4 +438,14 @@ public class Login : Network
     {
         isRemember = rememberMeToggle.isOn;
     }
+
+    public void ClickQuit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
 }
