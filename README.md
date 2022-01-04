@@ -10,9 +10,6 @@ As you can't access to the network part of this game through the code posted, i 
 
 ### PHP FILES :
 
-[database.txt](https://github.com/dev1ous/Drop-The-Cosmonaut/files/7809552/database.txt)
-
-
 [login.txt](https://github.com/dev1ous/Drop-The-Cosmonaut/files/7809553/login.txt)
 
 
