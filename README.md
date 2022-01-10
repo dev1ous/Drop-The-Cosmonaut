@@ -20,3 +20,5 @@ As you can't access to the network part of this game through the code posted, i 
 
 
 [submit_score.txt](https://github.com/dev1ous/Drop-The-Cosmonaut/files/7809556/submit_score.txt)
+
+(Additional database.php not shown here for privacy)
